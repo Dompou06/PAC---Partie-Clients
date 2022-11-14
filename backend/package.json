@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/nodemailer": "^6.4.4",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "cron": "^1.8.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-rate-limit": "^6.3.0",
+    "helmet": "^5.0.2",
+    "http": "^0.0.1-security",
+    "http-status": "^1.5.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
+    "mysqldump": "^3.2.0",
+    "nodemailer": "^6.7.2",
+    "nodemon": "^2.0.15",
+    "pdfkit": "^0.13.0",
+    "sequelize": "^6.17.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.10.0"
+  }
+}

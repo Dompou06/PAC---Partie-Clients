@@ -1,0 +1,169 @@
+@charset "UTF-8";
+.red {
+  background-color: red;
+}
+
+.bg-leg {
+  background-color: #00B800;
+}
+
+.bg-leg--darken {
+  background-color: #006c00;
+}
+
+.bg-fruit {
+  background-color: #ffbb33;
+}
+
+.bg-fruit--darken {
+  background-color: #ff7f00;
+}
+
+.bg-prod {
+  background-color: #aa66cc;
+}
+
+.bg-prod--darken {
+  background-color: #8639ac;
+}
+
+.bg-prod--verydarken {
+  background-color: #682d86;
+}
+
+.bg-tools {
+  background-color: #DDD3BA;
+}
+
+.bg-tools--darken {
+  background-color: #c4b287;
+}
+
+.bg-tools--ultradarken {
+  background-color: #211d11;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.nav_bg {
+  background-color: #8AED21 !important;
+}
+
+.text-leg {
+  color: #00B800;
+}
+
+.text-leg--lighten {
+  color: #06ff06;
+}
+
+.text-fruit {
+  color: #ffbb33;
+}
+
+.text-fruit--lighten {
+  color: #FFEC27;
+}
+
+.text-prod {
+  color: #aa66cc;
+}
+
+.text-prod--lighten {
+  color: #B732E6;
+}
+
+.text-tools--darken {
+  color: #99834b;
+}
+
+.text-tools--verydarken {
+  color: #665732;
+}
+
+.text-tools--ultradarken {
+  color: #332b19;
+}
+
+.text-fonce {
+  color: #211d11 !important;
+}
+
+.form-control {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: #211d11 solid 2px;
+  color: #211d11;
+}
+.form-control:focus {
+  outline: none;
+  box-shadow: none;
+  border-bottom: #211d11 solid 2px;
+}
+.form-control:disabled {
+  background-color: white;
+  color: #211d11;
+}
+
+.form-label {
+  color: #211d11 !important;
+}
+
+.input-group-text {
+  border: 0;
+  border-bottom: solid 2px #211d11;
+  background-color: #DDD3BA;
+  color: #211d11;
+}
+
+input[type=checkbox] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+}
+
+input[type=checkbox] {
+  border-radius: 4px;
+  height: 20px;
+  width: 20px;
+  background: #fff;
+  border: 2px solid #665732;
+}
+
+input[type=checkbox]:checked {
+  background: #665732;
+  margin: 0px;
+  position: relative;
+}
+input[type=checkbox]:checked:before {
+  content: "✓";
+  display: block;
+  color: white;
+  font-size: 13px;
+  position: absolute;
+  left: 4px;
+}
+
+section {
+  height: 91vh;
+}
+section .vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 100%;
+}
+section footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100.7%;
+  height: 5vh;
+}
+
+/*# sourceMappingURL=style.css.map */
