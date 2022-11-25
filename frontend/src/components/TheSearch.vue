@@ -1,31 +1,32 @@
 <template>
-  <div v-if="mobile && orientation" class="nav_bg"
->
-  <input
-v-model="searchTerm"
-class="nav_bg"
-        autocomplete="off" 
-        type="text" 
+  <div v-if="mobile && orientation" class="nav_bg">
+    <input
+      v-model="searchTerm"
+      class="nav_bg"
+      autocomplete="off"
+      type="text"
       placeholder="Rechercher"
-        @input="filterProducts(searchTerm)">
-  <div v-for="product in filteredProducts" :key="product.id" class="bg-light">
-    <router-link
-          :to="{
-            name: 'TheProducts',
-            params: {
-              linkType: `${product.ref[0]}_${product.ref[2]}_${product.id}`,
-            },
-          }"
-          :aria-label="`${product.name} ${product.variety}`"
-          @click="close"
-        >
-          <span class="fw-bold ps-1">{{ product.name }} {{ product.variety }} </span>
-        </router-link>
+      @input="filterProducts(searchTerm)"
+    />
+    <div v-for="product in filteredProducts" :key="product.id" class="bg-light">
+      <router-link
+        :to="{
+          name: 'TheProducts',
+          params: {
+            linkType: `${product.ref[0]}_${product.ref[2]}_${product.id}`,
+          },
+        }"
+        :aria-label="`${product.name} ${product.variety}`"
+        @click="close"
+      >
+        <span class="fw-bold ps-1"
+          >{{ product.name }} {{ product.variety }}
+        </span>
+      </router-link>
+    </div>
   </div>
-</div>
   <div v-else class="dropdown">
-    <button
-class="nav_bg">
+    <button class="nav_bg">
       <input
         v-model="searchTerm"
         autocomplete="off"
@@ -33,7 +34,7 @@ class="nav_bg">
         type="search"
         placeholder="Rechercher"
         aria-label="Rechercher"
-    @input="filterProducts(searchTerm)"
+        @input="filterProducts(searchTerm)"
       />
     </button>
     <ul class="" aria-labelledby="dropdownMenuButton1">
@@ -53,7 +54,6 @@ class="nav_bg">
       </li>
     </ul>
   </div>
-
 </template>
 
 <script>
@@ -73,7 +73,7 @@ export default {
     window.addEventListener('resize', this.checkScreen)
     this.checkScreen()
   },
-  methods: { 
+  methods: {
     checkScreen() {
       this.windowWidth = window.innerWidth
       if (this.windowWidth <= 768) {
@@ -96,7 +96,7 @@ export default {
       return
     },
     filterProducts(value) {
-    //  console.log('value', value)
+      //  console.log('value', value)
       if (value != '') {
         StockService.searchWeekArticles(value).then((response) => {
           //console.log('response', response)
@@ -112,7 +112,7 @@ export default {
       this.filteredProducts = ''
       // eslint-disable-next-line vue/require-explicit-emits
       this.$emit('closeSearch')
-    }
+    },
   },
 }
 </script>
@@ -145,49 +145,56 @@ div {
     list-style: none !important;
     //margin-left: -4vw !important;
     background-color: white;
-   li a {
-    font-weight: 700;
-     color: black;
+    li a {
+      font-weight: 700;
+      color: black;
     }
   }
 }
 //Pour desktop
 @media #{$desktop-up} {
- .dropdown {
-  button {
-    padding: 0;
-    margin: 0;
-    input {
-      height: 6.3vh;
+  .dropdown {
+    button {
+      padding: 0;
+      margin: 0;
+      input {
+        height: 6.3vh;
+      }
+      input:focus {
+        outline: 0;
+      }
     }
-    input:focus {
-      outline: 0;
+    ul {
+      padding-left: 0 !important;
+      li {
+        //margin-left: -9vw !important;
+        font-size: 0.8rem;
+      }
     }
   }
-  ul {
-   padding-left: 0 !important;    
-   li {
-      //margin-left: -9vw !important;
-      font-size: 0.8rem;
-    }
- }
-}
 }
 //Pour mobile portrait
 @media #{$mobile-up} {
   div {
     position: relative;
-    top: -.5vh ;
-    left: -35vw;
-    width: 110vw;
+    //top: -0.5vh;
+    //left: -35vw;
+    width: 70vw;
     button {
       position: relative;
-left: 25vw !important;    
-  }
-  ul {
+      //left: 25vw !important;
+      input {
+        height: 4.5vh;
+      }
+      input:focus {
+        outline: none;
+      }
+    }
+    ul {
       margin-left: 0 !important;
+      font-size: .7rem;
+    }
   }
-}
 }
 //Pour mobile landscape
 @media #{$mobile-down} {
@@ -195,28 +202,29 @@ left: 25vw !important;
     height: 7.7vh;
     padding-left: 1vw;
     input {
-   // margin-top: 1.5vh;
-   border: none;
-    height: 7.7vh;
-    line-height: 3vh;
+      // margin-top: 1.5vh;
+      border: none;
+      height: 7.7vh;
+      line-height: 3vh;
     }
     input:focus {
-   outline: none;  
+      outline: none;
     }
     .bg-light {
-      margin-left: -.8vw;
+      margin-left: -0.8vw;
       width: 50vw;
-      padding-top: .5vh;
+      padding-top: 0.5vh;
       a {
         color: black;
       }
     }
     ul {
       margin-left: 0 !important;
-    li a {
-      margin-left: -5vw !important;
+      li a {
+        margin-left: -5vw !important;
+      }
     }
   }
-  }
 }
-</style>;
+</style>
+;

@@ -109,7 +109,7 @@ export default {
     }, credential) => {
       //console.log('credential', credential)
       if(credential === 'Client') {
-        commit('SET_MANAGEMENT', 'customer')
+        commit('SET_MANAGEMENT', 'Customer')
       } else {
         commit('SET_MANAGEMENT', credential)
       }
