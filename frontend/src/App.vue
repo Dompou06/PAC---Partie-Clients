@@ -16,19 +16,18 @@
   :current-week="currentWeek"
   />
 </main>-->   
-  <main v-if="!operator">
+  <main v-if="!operator" class="">
   <router-view 
   :current-date="currentDate"
   :current-week="currentWeek"
   />    
   </main>
-  <main v-else class="main-rotared">
-    {{ operator }}
-   <!--<img src="./assets/img/background/home.jpg"/>-->
-   <router-view 
+  <main v-else class="main-rotared red">
+   <img src="./assets/img/background/home.jpg"/>
+   <!--<router-view 
   :current-date="currentDate"
   :current-week="currentWeek"
-  />
+  />-->
   </main>
   <footer v-if="!management || management === 'Customer'" class="footer-c">
  <TheFooter />
@@ -62,15 +61,16 @@ export default {
     }
   }, 
   data() {
+    //https://stackoverflow.com/questions/49380830/vue-js-how-to-get-window-size-whenever-it-changes
     const { offsetWidth, offsetHeight } = document.querySelector('#app')
     return {
       currentDate: '',
       currentWeek: '',
       operator: false,
-      orientation: '',
+      // orientation: window.innerWidth,
       offsetWidth,
       offsetHeight,
-      //   refreshScrollableArea: undefined,
+      refreshScrollableArea: undefined,
     }
   },
   computed: {
@@ -80,16 +80,18 @@ export default {
   },
   watch: {
     management(newManagement, oldManagement) {
-      console.log('newManagement',newManagement, 'oldManagent',oldManagement)
+      // console.log('newManagement',newManagement, 'oldManagent',oldManagement)
       if(newManagement != 'Customer') {
         if(window.innerHeight > window.innerWidth) {
-          console.log('yes')
+          console.log('yes watch', screen.orientation.type)
           this.operator = true
         } else {
           this.operator = false
+          console.log('no watch', screen.orientation.type)
         }
       } else {
         this.operator = false
+        console.log('no1 watch', screen.orientation.type)
       }
     },
     /*management(newManagement, oldManagent) {
@@ -169,25 +171,29 @@ export default {
       
     // },
     offsetHeight() {
+      console.log('offsetHeight changed', window.innerHeight, 'Width', window.innerWidth)
       if(this.management !== null && this.management !== 'Customer') {
         // console.log('offsetHeight changed', window.innerHeight, 'Width', window.innerWidth)
         if(window.innerHeight > window.innerWidth) {
           console.log('yes')
-          this.operator = true          
+          this.operator = true  
+          console.log('this.operator', this.operator)        
           // console.log('this.management', this.management)
           // console.log('offsetHeight changed', this.offsetHeight, 'offsetWidth', this.offsetWidth)
         // this.operator = true
         } else {
-          console.log('no')
+          console.log('no', window.innerWidth, window.innerHeight)
           this.operator = false
+          console.log('this.operator', this.operator)
         }
       } else {
         console.log('no1')
         this.operator = false
+        console.log('this.operator', this.operator)     
       }
     },
-  /*  orientation(newOrientaton, oldOrientation) {
-      console.log('ici', screen.orientation)
+    /* orientation(newOrientaton, oldOrientation) {
+      //console.log('ici', screen.orientation)
       console.log('newOrientaton', newOrientaton, 'oldOrientation', oldOrientation)
     }*/
   },
@@ -198,6 +204,9 @@ export default {
       this.offsetHeight = offsetHeight
     }, 100)
   },
+  /* beforeUnmount() {
+    return clearInterval(this.refreshScrollableArea)
+  },*/
   mounted() {     
     this.dateTime()
     this.operator = false
@@ -265,6 +274,9 @@ export default {
 @import "./assets/sass/style.scss";
 
 #app {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -354,10 +366,14 @@ footer {
 }*/
 main {
   position: relative;
-  top: 6vh;
+  top: 0;
   left: 0;
   width: 100vw;
-  height: 86.5vh;
+  height: 100vh;
+  /*top: 6vh;
+  left: 0;
+  width: 100vw;
+  height: 86.5vh;*/
   //background-color: red;
 }
 
@@ -378,14 +394,18 @@ main {
   z-index: 100;
 }
 /*.main {
-  position: absolute;
-  overflow: hidden !important;
+ // position: absolute;
+//  overflow: hidden !important;
+top: 6vh !important;
+left: 0;
+height: 95vh;
+width: 100vw;
 }*/
 .main-rotared {
   top: 5vh !important;
   left: 9.8vw;
   height: 95vh;
-  background-color: red;
+ // background-color: red;
   img {
     height: 95vh;
     width: 90.5vw;
@@ -407,7 +427,8 @@ main {
   
   .header {
     width: 100vw;
-    height: 93vh;
+    max-height: 50vh !important;
+   // height: 93vh;
     overflow: hidden !important;
   }
 main {
@@ -416,6 +437,12 @@ main {
   width: 100vw;
   height: 93vh;
 //  background-color: red;
+}
+.main {
+  top:0;
+ // left: 5vw;
+  width: 100vw;
+  height: 93vh;
 }
 footer {
   top: 93vh;

@@ -553,6 +553,8 @@ export default {
 //Pour mobile portrait
 @media #{$mobile-up} {
   .section-landscape {
+    position: relative;
+    top: 6vh;
     width: 100vw;
     height: 86.5vh;
     .w50 {
@@ -729,11 +731,12 @@ export default {
   }*/
   .operator {
     position: absolute;
-    top: 0vh;
+    top: 5vh;
+    left: 9.8vw;
     height: 100vh;
     width: 95vw;
     img {
-      width: 90.2vw;
+      width: 93vw;
       height: 95vh;
     }
   }

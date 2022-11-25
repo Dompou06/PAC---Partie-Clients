@@ -130,10 +130,10 @@ v-if="management === 'Manager'"
       </div>
      <!--Mobile--> 
       <div v-else>
-        <div
+        <!--<div
         class="dropend mt-2 align-self-start"
         :class="{ buttonactive: sectionActive === 'products' }"
-       >
+        >
         <button
           type="button"
           class="btn nav-color"
@@ -205,8 +205,8 @@ v-if="management === 'Manager'"
             </div>
           </li>
         </ul>
-      </div>
-      <div id="lineSearch" class="d-flex" @mouseleave="mouseLeaveS">
+      </div>-->
+      <!--<div id="lineSearch" class="d-flex" @mouseleave="mouseLeaveS">
         <div
           id="buttonSearch"
           type="button"
@@ -221,7 +221,7 @@ v-if="management === 'Manager'"
         <div id="menuSearch" class="hidden">
           <TheSearch @closeSearch="nofocusSearch" />
         </div>
-      </div>
+      </div>-->
       <section>
         <div
           class="dropend mt-2 align-self-start"
@@ -281,6 +281,22 @@ v-if="management === 'Manager'"
             @click="closeDropdownUser"
           />
         </div>
+        <div id="lineClock" class="d-flex" @mouseleave="mouseLeaveS">
+          <div
+            id="buttonClock"
+            type="button"
+            class="btn nav-color"
+            aria-label="Horodatage"
+            @click="eventClock"
+          >
+            <span class="text-tools--ultradarken"
+              ><font-awesome-icon :icon="['fas', 'clock']" />
+            </span>
+          </div>
+          <div id="menuClock" class="hidden fw-bold nav_bg">
+            {{ timestamp }}
+          </div>
+        </div>
         <div
 v-if="management === 'Manager'"
           class="">
@@ -289,22 +305,7 @@ v-if="management === 'Manager'"
           <div v-else-if="management === 'Administrator'" class="">
              <TheNavAdministrator />
           </div>
-      <div id="lineClock" class="d-flex" @mouseleave="mouseLeaveS">
-        <div
-          id="buttonClock"
-          type="button"
-          class="btn nav-color"
-          aria-label="Horodatage"
-          @click="eventClock"
-        >
-          <span class="text-tools--ultradarken"
-            ><font-awesome-icon :icon="['fas', 'clock']" />
-          </span>
-        </div>
-        <div id="menuClock" class="hidden fw-bold nav_bg">
-          {{ timestamp }}
-        </div>
-      </div>
+      
       </section>
       </div>
     </div>
@@ -571,6 +572,7 @@ export default {
 nav {
   position: absolute;
   top: 0;
+  height: 100vh;
   width: 100vw;
   padding: 0;
   z-index: 99;
@@ -934,10 +936,11 @@ nav {
 @media #{$mobile-down} {
   nav {
     padding: 0;
-    height: 100vh;
+    height: 100%;
     transition: 0.5s ease all;
   }
   .navbar-expand-v {
+    height: 100%;    
     width: 5vw;
     z-index: 99;
     .z50 {
@@ -1073,7 +1076,7 @@ nav {
   }
   section {
     position: absolute;
-    margin-top: 7vh;
+   // margin-top: 7vh;
     a {
       display: block;
       min-width: 5vw;
@@ -1095,7 +1098,7 @@ nav {
     }
   }
   #lineSearch, #lineClock {
-    position: absolute;
+    //position: absolute;
     min-height: 7vh;
     margin-top: 1vh;
     z-index: 99;
