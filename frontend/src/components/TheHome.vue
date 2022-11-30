@@ -5,7 +5,6 @@
     class="section-landscape notselectable d-flex flex-wrap"
   >-->
   <section
-v-if="!operator"
     class="section-landscape notselectable d-flex flex-wrap"
    >
     <div v-for="dep in departements" :key="dep.family_description" class="w50">
@@ -179,10 +178,10 @@ v-if="!operator"
     </div>
     
   </section>
-  <section v-else class="operator">
+  <!--<section v-else class="operator">
     <img src="../assets/img/background/home.jpg"/>
   </section>
-  <!-- Mobile Portrait -->
+   Mobile Portrait -->
  <!-- <section v-else class="section-portrait">
     <div class="row">
       <div
@@ -346,10 +345,10 @@ export default {
   },
   data() {
     return {
-      mobile: false,
-      mobileNav: false,
-      orientation: false,
-      operator: false,
+      // mobile: false,
+      // mobileNav: false,
+      //orientation: false,
+      //operator: false,
     }
   },
   computed: {
@@ -360,7 +359,7 @@ export default {
     }),
   },
   watch: {
-    management(newManagement, oldManagement) {
+    /* management(newManagement, oldManagement) {
       if(newManagement != 'Customer') {
         if(window.innerHeight > window.innerWidth) {
           // console.log('yes', window.innerWidth)
@@ -374,20 +373,23 @@ export default {
         this.operator = false
         // console.log('no1')
       }
-    }
+    },*/
+    /*operator(newOperator, oldOperator) {
+      console.log('newOperator', newOperator, 'oldOperator', oldOperator)
+    },*/
   },
-  created() {
+  /*created() {
     window.addEventListener('resize', this.checkScreen)
     this.checkScreen()
-  },
-  mounted() {
+  },*/
+  /* mounted() {
     this.checkScreen()
-  },
+  },*/
   methods: {
-    toggleMobileNav() {
+    /* toggleMobileNav() {
       this.mobileNav = !this.mobileNav
-    },
-    checkScreen() {
+    },*/
+    /* checkScreen() {
       if (window.innerWidth <= 992) {
         let screenOrientation =
           (screen.orientation || {}).type ||
@@ -397,30 +399,30 @@ export default {
           // console.log('portrait-primary', screenOrientation)
           if(this.management !== null && this.management !== 'Customer') {
             // console.log('ici')
-            this.operator = true
+            // this.operator = true
             this.mobile = true
             this.orientation = true
             return          
           } else {
-            this.operator = false
+            // this.operator = false
             this.mobile = true
             this.orientation = true
             return
           }
         } else {
           // console.log('portrait-landscape', screenOrientation)
-          this.operator = false
+          //this.operator = false
           this.mobile = true
           this.orientation = false
           return
         }
       }
-      this.operator = false
+      // this.operator = false
       this.orientation = false
       this.mobile = false
       this.mobileNav = false
       return
-    },
+    },*/
   },
 }
 </script>

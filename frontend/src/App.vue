@@ -16,19 +16,26 @@
   :current-week="currentWeek"
   />
 </main>-->   
-  <main v-if="!operator" class="">
+  <main class="">
   <router-view 
   :current-date="currentDate"
   :current-week="currentWeek"
   />    
-  </main>
-  <main v-else class="main-rotared red">
-   <img src="./assets/img/background/home.jpg"/>
-   <!--<router-view 
+  </main> 
+  <!--<main v-if="!operator" class="">
+  <router-view 
   :current-date="currentDate"
   :current-week="currentWeek"
-  />-->
+  :operator="operator"
+  />    
   </main>
+  <main v-else class="main-rotared">
+   <img src="./assets/img/background/home.jpg"/>
+   <router-view 
+  :current-date="currentDate"
+  :current-week="currentWeek"
+  />
+  </main>-->
   <footer v-if="!management || management === 'Customer'" class="footer-c">
  <TheFooter />
   </footer>
@@ -62,15 +69,14 @@ export default {
   }, 
   data() {
     //https://stackoverflow.com/questions/49380830/vue-js-how-to-get-window-size-whenever-it-changes
-    const { offsetWidth, offsetHeight } = document.querySelector('#app')
+    // const { offsetWidth, offsetHeight } = document.querySelector('#app')
     return {
       currentDate: '',
       currentWeek: '',
-      operator: false,
-      // orientation: window.innerWidth,
-      offsetWidth,
-      offsetHeight,
-      refreshScrollableArea: undefined,
+      // operator: false,
+      // offsetWidth,
+      // offsetHeight,
+    //  refreshScrollableArea: undefined,
     }
   },
   computed: {
@@ -79,21 +85,21 @@ export default {
     }),
   },
   watch: {
-    management(newManagement, oldManagement) {
-      // console.log('newManagement',newManagement, 'oldManagent',oldManagement)
+    /* management(newManagement, oldManagement) {
+      console.log('newManagement',newManagement, 'oldManagent',oldManagement)
       if(newManagement != 'Customer') {
         if(window.innerHeight > window.innerWidth) {
-          console.log('yes watch', screen.orientation.type)
+          // console.log('yes watch', screen.orientation.type)
           this.operator = true
         } else {
           this.operator = false
-          console.log('no watch', screen.orientation.type)
+          // console.log('no watch', screen.orientation.type)
         }
       } else {
         this.operator = false
-        console.log('no1 watch', screen.orientation.type)
+        // console.log('no1 watch', screen.orientation.type)
       }
-    },
+    },*/
     /*management(newManagement, oldManagent) {
       // console.log('newManagement',newManagement, 'oldManagent',oldManagent)
       if(this.management != 'Customer' && window.screen.width < window.screen.height) {
@@ -170,8 +176,8 @@ export default {
         }*/
       
     // },
-    offsetHeight() {
-      console.log('offsetHeight changed', window.innerHeight, 'Width', window.innerWidth)
+    /* offsetHeight() {
+      // console.log('offsetHeight changed', window.innerHeight, 'Width', window.innerWidth)
       if(this.management !== null && this.management !== 'Customer') {
         // console.log('offsetHeight changed', window.innerHeight, 'Width', window.innerWidth)
         if(window.innerHeight > window.innerWidth) {
@@ -191,25 +197,25 @@ export default {
         this.operator = false
         console.log('this.operator', this.operator)     
       }
-    },
+    },*/
     /* orientation(newOrientaton, oldOrientation) {
       //console.log('ici', screen.orientation)
       console.log('newOrientaton', newOrientaton, 'oldOrientation', oldOrientation)
     }*/
   },
   created() {
-    this.refreshScrollableArea = setInterval(() => {
+    /* this.refreshScrollableArea = setInterval(() => {
       const { offsetWidth, offsetHeight } = document.getElementById('app')
       this.offsetWidth = offsetWidth
       this.offsetHeight = offsetHeight
-    }, 100)
+    }, 100)*/
   },
   /* beforeUnmount() {
     return clearInterval(this.refreshScrollableArea)
   },*/
   mounted() {     
     this.dateTime()
-    this.operator = false
+    //this.operator = false
     // this.roleOrientation()
   },
   methods: {
