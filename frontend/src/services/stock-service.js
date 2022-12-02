@@ -124,7 +124,6 @@ export default {
       })
   },*/
   find(credentials) {
-  //  console.log('credentials', credentials)
     return api
       .get('stock/currentarticle', {
         params: {
@@ -132,19 +131,16 @@ export default {
           value: credentials.value,
         }
       }).then(response => {
-      //  console.log('response', response.data)
         return response.data
       })
   },
   findCart(credentials) {
-    // console.log('credentials', credential)
     return api
       .get('stock/cart', {
         params: {
           ref: credentials
         }
       }).then(response => {
-        //console.log('response', response.data)
         return response.data
       })
   },
@@ -209,7 +205,6 @@ export default {
         }
       })
       .then(response => {
-      // console.log('response', response)
         return response.data
       })
   },

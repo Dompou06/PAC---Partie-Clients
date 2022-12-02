@@ -29,11 +29,6 @@ export default {
       management: 'auth/management',
     }),
   },
-  watch: {
-    /* orientation(newOrientation, oldOrientation) {
-      console.log('newOrientation',newOrientation, 'oldOrientation',oldOrientation)
-    }*/
-  },
   created() {
     window.addEventListener('resize', this.checkScreen)
     this.checkScreen()

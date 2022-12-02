@@ -555,6 +555,7 @@ nav {
     padding: 0;
     height: 6.3vh;
     font-size: 0.8rem;
+    background-color: $theme;
     .z50 {
       display: flex;
     }

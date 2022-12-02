@@ -7,7 +7,6 @@ import cart from './cart-module'
 
 const store = createStore({
   state: {
-    //cart: JSON.parse(localStorage.getItem('cart')).length
   },
   getters: {},
   mutations: {},

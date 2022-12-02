@@ -158,19 +158,6 @@
             </div>
             <div v-if="!roleActive" class="text-center">
               <TheNavCustomer :cart="cart.cart" />
-              <!--<router-link to="/cart" class="nav-link root">
-                <div class="notselectable cart-shopping">
-                  <div class="cart-shopping--over">
-                    <font-awesome-icon
-                      :icon="['fas', 'cart-shopping']"
-                      aria-label="Voir le panier"
-                    />
-                  </div>
-                  <div class="cart-shopping--overlay">
-                    <span v-if="cart.cart">{{ cart.cart }}</span><span v-else>0</span>
-                  </div>
-                </div>
-              </router-link>-->
             </div>
           </div>
           <div v-else class="d-flex">
@@ -193,7 +180,7 @@
               :class="{ actived: sectionActive === 'products' }"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-             >
+            >
               <span class=""
                 ><font-awesome-icon :icon="['fas', 'cart-arrow-down']" />
               </span>
@@ -289,7 +276,7 @@
               :class="{ actived: subLinkActive === 'profile' }"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-             >
+            >
               <span class=""
                 ><font-awesome-icon :icon="['fas', 'user']"
               /></span>
@@ -360,7 +347,7 @@
               class="btn btn-cart"
               aria-expanded="false"
               @mouseleave="toggleMobileNav"
-             >
+            >
               <component
                 :is="switchComponent"
                 :cart="cart.cart"
@@ -749,7 +736,6 @@ export default {
       }
     },
     changeRole(value) {
-      //console.log(value)
       this.sectionActive = 'user'
       this.linkActive = value
       this.changeManagement(value)
@@ -759,7 +745,6 @@ export default {
       } else {
         this.roleActive = false
       }
-      //  console.log(this.$store.getters['auth/management'])
       this.switchComponent = `TheNav${this.$store.getters['auth/management']}`
     },
     toggleMobileNav() {
@@ -897,24 +882,9 @@ nav {
         padding: 0 0 0 1.4rem;
         color: darken($tools, 65%);
       }
-      .col-dropdown-item {
-        font-size: 0.7rem;
-        font-weight: 600;
-        line-height: 1.4rem;
-        padding: 0 0 0 0;
-        margin: 0;
-        color: darken($tools, 65%);
-      }
-      .col-dropdown-item:hover {
-        background-color: darken($moyen, 10%);
-        color: white;
-      }
       .subcategory {
         padding: 0 0 0 2rem;
       }
-    }
-    .col-dropdown-menu {
-      min-width: 18vw !important;
     }
   }
   .buttonactive {
@@ -935,12 +905,6 @@ nav {
     font-size: 0.8rem;
     color: darken($tools, 65%) !important;
     background-color: white !important;
-  }
-  .timestamp {
-    font-size: 0.7rem;
-    font-weight: 600;
-    line-height: 2.3rem;
-    color: darken($tools, 65%);
   }
 }
 .icon-inscription {
@@ -1043,10 +1007,6 @@ nav {
       .btn-cart {
         width: 5%;
       }
-      button.show {
-        background-color: darken($moyen, 10%) !important;
-        color: white !important;
-      }
       .actived {
         background-color: darken($moyen, 10%) !important;
         color: white !important;
@@ -1107,128 +1067,6 @@ nav {
         }
       }
     }
-    /*   .buttonactive {
-      width: 25vw;
-    }
-  }
-  .dropdown-nav {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 6.4vh;
-    left: 0;
-    height: 4.5vh;
-    width: 100%;
-    background-color: $theme;
-    .ps-2_5 {
-      padding-left: 0.7rem;
-    }
-  }
-  .dropdown-item {
-    padding: 0 !important;
-    a {
-      color: darken($tools, 65%);
-    }
-  }
-  .dropdown-menu {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  #articles-button--mu,
-  #role-button--mu,
-  #profile-button--mu {
-    margin: 0;
-    font-size: 0.8rem;
-    background-color: $theme;
-    color: transparent !important;
-  }
-  .subdropdown {
-    top: -1vh;
-    width: 25vw;
-    height: 4.5vh;
-    a {
-      display: block;
-      height: 4.5vh;
-      color: darken($tools, 65%);
-      margin: 0 !important;
-      padding-top: 0.5vh;
-      .icon-inscription {
-        font-size: 2.2vh !important;
-      }
-    }
-    .router-link-active {
-      margin: 0 !important;
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-    }
-    .btn-search {
-      height: 4.5vh;
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-    }
-    .dropdown-user {
-      display: block;
-      left: -15vw !important;
-    }
-    .subdropdown-menu {
-      width: 100vw;
-      margin: -0.5vh 0 0 0;
-      padding: 0 2vw;
-      .subdropdown-item {
-        width: 100vw;
-        margin-left: -50vw;
-        padding: 0 2vw;
-        .subdropdown-role {
-          width: 80vw;
-          .subdropdown-profile {
-            height: 4.4vh;
-            width: 35vw;
-            text-align: center;
-            line-height: 3.5vh;
-          }
-
-          .subdropdown-logout {
-            width: 20vw;
-          }
-        }
-      }
-    }
-    #buttonMS {
-      padding-left: 0 !important;
-    }
-    .h100 {
-      height: 4.7vh;
-    }
-    .w25 {
-      width: 25vw;
-    }
-    color: white !important;
-  }
-  .nav-item .router-link-active,
-  .actived {
-    display: block;
-    background-color: darken($moyen, 10%) !important;
-    color: white !important;
-  }
-  .dropdown-item .router-link-active {
-    display: block;
-    background-color: darken($moyen, 10%) !important;
-    color: white !important;
-  }
-  .role .actived {
-    background-color: darken($moyen, 10%) !important;
-    color: white !important;
-  }
-  .border-bottom {
-    border-bottom-color: $theme !important;
-  }
-  .ps {
-    padding-left: 6vw;
-  }
-  .btn {
-    margin: 0 !important;
-    padding: 0 !important;
-  }*/
   }
 }
 //Pour mobile landscape
@@ -1266,13 +1104,6 @@ nav {
         }
       }
     }
-    .buttonsearchfocus {
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-    }
-    .textwhite {
-      color: white !important;
-    }
     button[type="button"]:focus {
       background-color: darken($moyen, 10%) !important;
       color: white !important;
@@ -1303,69 +1134,9 @@ nav {
       color: white !important;
     }
     form {
-      .form-control {
-        width: 80%;
-      }
       button[type="submit"] {
         width: 12% !important;
         font-size: 0.9rem;
-      }
-    }
-    .responsabilities {
-      width: 100%;
-      form {
-        width: 15vw;
-        .responsabilities-input {
-          width: 98%;
-          input[type="week"] {
-            width: 100%;
-            height: 6vh;
-            padding: 0;
-            border: 0;
-            font-size: inherit;
-          }
-          input[type="week"]:focus {
-            outline: none;
-          }
-        }
-        button[type="submit"] {
-          height: 6vh;
-          margin-left: 1vw;
-          font-size: 0.7rem;
-          line-height: 0.4rem;
-        }
-      }
-    }
-  }
-  .dropdown-user--parent {
-    height: 7vh;
-    button {
-      height: 7vh;
-    }
-    .dropdown-user {
-      min-width: 55.1vw;
-      margin: 0;
-      padding: 0;
-      li {
-        height: 7vh;
-        margin: 0;
-        padding: 0 0.5vw;
-        line-height: 7vh;
-        list-style-type: none;
-      }
-      div {
-        margin: 0;
-        padding: 0;
-        .actived {
-          background-color: darken($moyen, 10%) !important;
-          color: white;
-        }
-        .dropdown-item {
-          a {
-            text-align: start;
-            font-size: 0.7rem;
-          }
-        }
       }
     }
   }
@@ -1420,12 +1191,6 @@ nav {
       border-radius: 0;
       text-align: center;
       font-size: 100%;
-    }
-    .buttonSearchActive {
-      background-color: darken($moyen, 10%) !important;
-      span {
-        color: white !important;
-      }
     }
     #menuSearch {
       min-width: 50vw;

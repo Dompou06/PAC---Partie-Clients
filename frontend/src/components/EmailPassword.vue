@@ -7,7 +7,9 @@
           <div class="col-1 col-md-3"></div>
           <div class="col-10 col-md-6">
             <div class="mb-3">
-              <label for="email" class="form-label">Email associé à votre compte</label>
+              <label for="email" class="form-label"
+                >Email associé à votre compte</label
+              >
               <input
                 id="email"
                 v-model="form.email"
@@ -23,7 +25,11 @@
         </div>
         <div class="row mt-4">
           <div class="col-md-3"></div>
-          <button id="buttonsend" type="submit" class="btn btn-success col-12 col-md-6 fw-bold">
+          <button
+            id="buttonsend"
+            type="submit"
+            class="btn btn-success col-12 col-md-6 fw-bold"
+          >
             Envoyer
           </button>
           <div class="col-md-3"></div>
@@ -50,30 +56,28 @@ export default {
   methods: {
     sendEmail() {
       const credential = this.form
-      AuthService.verifyMail(credential)
-        .then(response => {
-          document.getElementById('buttonsend').disabled = true
-          this.msg = response.data.response
-        })
-    }
+      AuthService.verifyMail(credential).then((response) => {
+        document.getElementById('buttonsend').disabled = true
+        this.msg = response.data.response
+      })
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-  @import "../assets/sass/libs/variables.scss";
-  
-  h2 {
-      color: darken($tools, 65%) !important
-    } 
+@import "../assets/sass/libs/variables.scss";
+
+h2 {
+  color: darken($tools, 65%) !important;
+}
 button {
   border-radius: 0;
 }
-    //Pour desktop
+//Pour desktop
 @media #{$desktop-up} {
   h2 {
-    //border-top: 1px solid darken($moyen, 10%);
-    box-shadow: inset 0em .1em .2em darken($moyen, 10%);
+    box-shadow: inset 0em 0.1em 0.2em darken($moyen, 10%);
     font-size: 4vh;
   }
   form {
@@ -88,9 +92,9 @@ button {
   form {
     margin-top: 3vh;
     input {
-              height: 5vh;
-              font-size: .8rem;           
-            }
+      height: 5vh;
+      font-size: 0.8rem;
+    }
   }
 }
 //Pour mobile landscape
