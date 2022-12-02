@@ -100,7 +100,7 @@
           />
         </div>
         <div id="tools--icons">
-          <div class="d-flex justify-content-around">
+        <div class="d-flex justify-content-around">
             <router-link
               :to="{
                 name: 'TheError',

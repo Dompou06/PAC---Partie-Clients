@@ -1,19 +1,20 @@
 <template>
-  <nav class="navbar-expand-v nav_bg">
-    <div class="z50" @mouseleave="mouseLeaveMd">
+  <nav class="navbar-expand-v">
+    <div class="nav-manager--rotate"></div>
+    <div class="z50">
       <router-link to="/" class="navbar-brand" aria-label="Accueil">
         <img src="../../assets/img/nav_pac.png" alt="Accueil" />
       </router-link>
       <!-- Menu desktop -->
       <div v-if="!mobile">
         <div class="nav-d d-flex justify-content-between align-items-center">
-          <div
+          <!--<div
             id="articlesd"
             class="flex-fill dropdown"
             :class="{
               buttonactive: sectionActive === 'products',
             }"
-          >
+           >
             <button
               class="btn fw-bold"
               type="button"
@@ -75,18 +76,17 @@
                 </div>
               </li>
             </ul>
-          </div>
+          </div>-->
           <div
 v-if="management === 'Manager'"
           class="flex-fill">
-            <TheNavManager />
+            <TheNavManager
+            mobile: desktop />
           </div>
           <div v-else-if="management === 'Administrator'" class="flex-fill">
              <TheNavAdministrator />
           </div>
-          <div id="search" class="flex-fill">
-            <TheSearch />
-          </div>
+          
           <div
             class="flex-fill div-right d-flex justify-content-end align-items-center"
            >
@@ -130,106 +130,11 @@ v-if="management === 'Manager'"
       </div>
      <!--Mobile--> 
       <div v-else>
-        <!--<div
-        class="dropend mt-2 align-self-start"
-        :class="{ buttonactive: sectionActive === 'products' }"
-        >
-        <button
-          type="button"
-          class="btn nav-color"
-          data-bs-toggle="dropdown"
-          data-bs-display="static"
-          aria-expanded="false"
-          aria-label="Articles en stock"
-          @click="closeDropdownUser"
-        >
-          <span class="text-tools--ultradarken"
-            ><font-awesome-icon :icon="['fas', 'cart-arrow-down']" />
-          </span>
-        </button>
-        <ul class="dropdown-menu nav_bg">
-          <li class="nav-color d-flex flex-row pt-0">
+           <section>
+          <div id="common" class="d-flex flex-column justify-content-between mt-2">
             <div
-              v-for="dep in departements"
-              :key="dep.family_description"
-              class="flex-fill p-0"
-            >
-              <div :class="{ familyborder: dep.family_id != 3 }">
-                <router-link
-                  :to="{
-                    name: 'TheProducts',
-                    params: {
-                      linkType: `${dep.family_id}__products`,
-                    },
-                  }"
-                  class="dropdown-item fw-bold lh1"
-                  :class="{
-                    actived:
-                      dep.family_description === family ||
-                      linkActive === `${dep.family_id}`,
-                  }"
-                  :aria-label="`${dep.family_description}`"
-                  ><span @click="toggleMobileNav">{{
-                    dep.family_description
-                  }}</span>
-                </router-link>
-                <div v-for="cat in dep.categories" :key="cat" class="rd">
-                  <div
-                    v-if="
-                      cat.family_abbreviation === dep.family_id &&
-                      cat.category_products === 'true'
-                    "
-                  >
-                    <router-link
-                      :to="{
-                        name: 'TheProducts',
-                        params: {
-                          linkType: `${dep.family_id}_${cat.category_id}_products`,
-                        },
-                      }"
-                      class="dropdown-item nav-color subcategory"
-                      :class="{
-                        actived:
-                          cat.category_abbreviation === category ||
-                          subLinkActive === `${cat.category_id}`,
-                      }"
-                      :aria-label="`${dep.family_description} ${cat.category_description}`"
-                    >
-                      <span class="ps-1" @click="toggleMobileNav">{{
-                        cat.category_description
-                      }}</span>
-                    </router-link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>-->
-      <!--<div id="lineSearch" class="d-flex" @mouseleave="mouseLeaveS">
-        <div
-          id="buttonSearch"
-          type="button"
-          class="btn nav-color"
-          aria-label="Rechercher"
-          @click="eventSearch"
-        >
-          <span class="text-tools--ultradarken"
-            ><font-awesome-icon :icon="['fas', 'magnifying-glass']" />
-          </span>
-        </div>
-        <div id="menuSearch" class="hidden">
-          <TheSearch @closeSearch="nofocusSearch" />
-        </div>
-      </div>-->
-      <section>
-        <div
-          class="dropend mt-2 align-self-start"
-          :class="{
-            buttonactive:
-              sectionActive === 'user' || subLinkActive === 'profile',
-          }"
-        >
+            class="dropend align-self-start"
+           >
           <button
             type="button"
             class="btn nav-color ps-1"
@@ -273,39 +178,56 @@ v-if="management === 'Manager'"
               />
             </div>
           </ul>
-        </div>
-        <div class="text-center notselectable pt-2 nav-color">
-          <component
-            :is="switchComponent"
-            :cart="cart.cart"
-            @click="closeDropdownUser"
-          />
-        </div>
-        <div id="lineClock" class="d-flex" @mouseleave="mouseLeaveS">
+          </div>
           <div
-            id="buttonClock"
+            class="mt-1 dropend align-self-start"
+           >
+          <button
             type="button"
-            class="btn nav-color"
+            class="btn nav-color ps-1"
+            data-bs-toggle="dropdown"
+            data-bs-display="static"
+            aria-expanded="false"
             aria-label="Horodatage"
-            @click="eventClock"
           >
             <span class="text-tools--ultradarken"
               ><font-awesome-icon :icon="['fas', 'clock']" />
             </span>
-          </div>
-          <div id="menuClock" class="hidden fw-bold nav_bg">
+          </button>
+          <ul class="dropdown-menu nav_bg">
+            <li
+              class="ps-1 fw-bold lh1"
+            >
             {{ timestamp }}
+            </li>
+            </ul>
           </div>
-        </div>
-        <div
+         <!-- <div id="lineClock" class="d-flex">
+            <div
+              id="buttonClock"
+              type="button"
+              class="btn nav-color"
+              aria-label="Horodatage"
+              @click="eventClock"
+            >
+              <span class="text-tools--ultradarken"
+                ><font-awesome-icon :icon="['fas', 'clock']" />
+              </span>
+            </div>
+            <div id="menuClock" class="hidden fw-bold nav_bg">
+              {{ timestamp }}
+            </div>
+          </div>-->
+          <div
 v-if="management === 'Manager'"
-          class="">
-            <TheNavManager />
+          class="operator">
+          <TheNavManager />
           </div>
-          <div v-else-if="management === 'Administrator'" class="">
-             <TheNavAdministrator />
+          <div v-else-if="management === 'Administrator'" id="administrator" class="operator">
+            <TheNavAdministrator />
+         </div>
           </div>
-      
+
       </section>
       </div>
     </div>
@@ -317,14 +239,12 @@ import AuthService from '@/services/auth-service.js'
 import StockService from '@/services/stock-service.js'
 import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import TheSearch from '../../components/TheSearch.vue'
 import TheNavManager from './managers/TheNav.vue'
 import TheNavAdministrator from './administrator/TheNav.vue'
 
 export default {
   name: 'TheNavigation',
   components: {
-    TheSearch,
     TheNavManager,
     TheNavAdministrator,
   },
@@ -356,14 +276,11 @@ export default {
       sectionActive: '',
       linkActive: '',
       subLinkActive: '',
-      searchActive: false,
-      responsibility: '',
       roleActive: false,
       timestamp: '',
       userActive: '',
       jobActive: '',
       partActive: '',
-      searchTerm: this.value,
     }
   },
   computed: {
@@ -392,26 +309,6 @@ export default {
         this.subLinkActive = ''
       }
     },
-    searchTerm(currentValue) {
-      this.varietySearched = []
-      for (let i = 0; i < this.allVarieties.response.length; i++) {
-        if (
-          this.allVarieties.response[i].variete.startsWith(currentValue) ===
-          true
-        ) {
-          let variety = {
-            id: this.allVarieties.response[i].id,
-            name: this.allVarieties.response[i].variete,
-          }
-          this.varietySearched.push(variety)
-        }
-      }
-      for (let i = 0; i < this.varietySearched.length; i++) {
-        if (this.varietySearched[i].name === currentValue) {
-          this.varietySearched = []
-        }
-      }
-    },
   },
   mounted() {
     this.filterRoles(this.role)
@@ -434,26 +331,11 @@ export default {
       changeManagement: 'auth/changeManagement',
       logoutAction: 'auth/logout',
     }),
-    eventSearch() {
-      const menu = document.getElementById('menuSearch')
-      menu.classList.toggle('hidden')
-      const button = document.getElementById('buttonSearch')
-      button.classList.toggle('buttonSearchActive')
-    },
     eventClock() {
       const menu = document.getElementById('menuClock')
       menu.classList.toggle('hidden')
       const button = document.getElementById('buttonClock')
       button.classList.toggle('buttonClockActive')
-    },
-    nofocusSearchMP() {
-      document.getElementById('buttonMS').classList.toggle('btn-search')
-    },
-    nofocusSearch() {
-      const menu = document.getElementById('menuSearch')
-      menu.classList.toggle('hidden')
-      const button = document.getElementById('buttonSearch')
-      button.classList.toggle('buttonSearchActive')
     },
     filterRoles(value) {
       // console.log('value', this.role)
@@ -495,10 +377,6 @@ export default {
       //  console.log(this.$store.getters['auth/management'])
       this.switchComponent = `TheNav${this.$store.getters['auth/management']}`
     },
-    toggleMobileNav() {
-      this.searchActive = !this.searchActive
-      this.mobileNav = !this.mobileNav
-    },
     closeMobileNav() {
       this.mobileNav = false
     },
@@ -507,15 +385,6 @@ export default {
     },
     mouseLeaveMd() {
       this.dropdownUser = false
-    },
-    mouseLeaveS() {
-      const menu = document.getElementById('menuSearch')
-      menu.classList.add('hidden')
-      const button = document.getElementById('buttonSearch')
-      button.classList.remove('buttonSearchActive')
-    },
-    searchEvent() {
-      this.searchActive = !this.searchActive
     },
     toggleDropdownUser() {
       this.dropdownUser = !this.dropdownUser
@@ -735,11 +604,11 @@ nav {
 @media #{$mobile-up} {
   nav {
     padding: 0;
-    height: 100vh;
-    transition: 0.5s ease all;
+    height: 5vh;
+   // transition: 0.5s ease all;
   }
   .navbar-expand-v {
-    position: absolute;
+   /* position: absolute;
     -webkit-transform: rotate(90deg) !important;
     -moz-transform: rotate(90deg) !important;
     -o-transform: rotate(90deg) !important;
@@ -750,186 +619,15 @@ nav {
     left: -9vw;
     height: 100vw;
     width: 5vh;
-    z-index: 99;
+    background-image: url(../../assets/img/background/nav_manaher.jpg);
+    z-index: 99;*/
     .z50 {
-      position: fixed;
-      top: 0;
-      width: 5vh;
+      display: none !important;
     }
-    .navbar-brand {
-      img {
-        width: 5vh;
-      }
-    }
-    button[type="button"] {
-      min-width: 3vh;
-      font-size: 3vh;
-      height: 7.5vw;
-      padding: 0 1.4vh 0 0.6vh;
-      border-radius: 0;
-    }
-    .buttonactive {
-      button {
-        background-color: darken($moyen, 10%) !important;
-        // width: 3vh !important;
-        span {
-          color: white !important;
-        }
-      }
-    }
-    .buttonsearchfocus {
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-    }
-    .textwhite {
-      color: white !important;
-    }
-    button[type="button"]:focus {
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-      span {
-        color: white !important;
-      }
-    }
-  }
-  .dropdown-menu {
-    min-width: 50vh;
-    margin-left: -0.6vh !important;
-    padding: 0;
-    font-size: 0.7rem;
-    border: 0;
-    li a {
-      font-size: 0.7rem;
-      text-align: start;
-    }
-    .dropdown-item {
-      padding: 0 0.5rem;
-      margin: 0;
-    }
-    .lh1 {
-      line-height: 7.5vw;
-    }
-    .actived {
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-    }
-    form {
-      .form-control {
-        width: 80%;
-      }
-      button[type="submit"] {
-        width: 12% !important;
-        font-size: 0.9rem;
-      }
-    }
-    .responsabilities {
-      width: 100%;
-      form {
-        width: 15vh;
-        .responsabilities-input {
-          width: 98%;
-          input[type="week"] {
-            width: 100%;
-            height: 6vw;
-            padding: 0;
-            border: 0;
-            font-size: inherit;
-          }
-          input[type="week"]:focus {
-            outline: none;
-          }
-        }
-        button[type="submit"] {
-          height: 6vw;
-          margin-left: 1vh;
-          font-size: 0.7rem;
-          line-height: 0.4rem;
-        }
-      }
-    }
-  }
-  .dropdown-user--parent {
-    height: 7vw;
-    button {
-      height: 7vw;
-    }
-    .dropdown-user {
-      min-width: 55.1vh;
-      margin: 0;
-      padding: 0;
-      li {
-        height: 7vw;
-        margin: 0;
-        padding: 0 0.5vh;
-        line-height: 7vw;
-        list-style-type: none;
-      }
-      div {
-        margin: 0;
-        padding: 0;
-        .actived {
-          background-color: darken($moyen, 10%) !important;
-          color: white;
-        }
-        .dropdown-item {
-          a {
-            text-align: start;
-            font-size: 0.7rem;
-          }
-        }
-      }
-    }
+    
   }
   section {
-    position: absolute;
-    margin-top: 7vh;
-    a {
-      display: block;
-      min-width: 5vh;
-      text-align: center;
-      border-radius: 0;
-      color: darken($tools, 65%);
-    }
-    .router-link-active {
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-      max-height: 7vw !important;
-    }
-    button[type="button"]:focus {
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-      span {
-        color: white !important;
-      }
-    }
-  }
-  #lineSearch, #lineClock {
-    position: absolute;
-    min-height: 5vw;
-    margin-top: 1vh;
-    z-index: 99;
-    #buttonSearch, #buttonClock {
-      width: 5vh;
-      line-height: 5vh;
-      padding: 0;
-      border-radius: 0;
-      text-align: center;
-      font-size: 100%;
-    }
-    .buttonSearchActive, .buttonClockActive {
-      background-color: darken($moyen, 10%) !important;
-      span {
-        color: white !important;
-      }
-    }
-    #menuSearch {
-      min-width: 50vw;
-    }
-    #menuClock {
-      min-width: 50vh;
-      padding-left: 2vh;
-      line-height: 2rem;
-    }
+      display: none !important;
   }
 }
 //Pour mobile landscape
@@ -937,12 +635,17 @@ nav {
   nav {
     padding: 0;
     height: 100%;
-    transition: 0.5s ease all;
+   // transition: 0.5s ease all;
   }
   .navbar-expand-v {
     height: 100%;    
     width: 5vw;
     z-index: 99;
+    background-color: $theme;
+    #common {
+      height: 16vh;
+      //background-color: red;
+    }
     .z50 {
       position: fixed;
       top: 0;
@@ -953,10 +656,10 @@ nav {
       }
     }
     button[type="button"] {
-      min-width: 3vw;
+      min-width: 5vw;
       font-size: 3vw;
       height: 7.5vh;
-      padding: 0 1.4vw 0 0.6vw;
+      padding: 0 1vw 0 0;
       border-radius: 0;
     }
     .buttonactive {
@@ -968,13 +671,6 @@ nav {
         }
       }
     }
-    .buttonsearchfocus {
-      background-color: darken($moyen, 10%) !important;
-      color: white !important;
-    }
-    .textwhite {
-      color: white !important;
-    }
     button[type="button"]:focus {
       background-color: darken($moyen, 10%) !important;
       color: white !important;
@@ -984,8 +680,8 @@ nav {
     }
   }
   .dropdown-menu {
-    min-width: 50vw;
-    margin-left: -3.2vw !important;
+    min-width: 47.3vw;
+    margin-left: -.1vw !important;
     padding: 0;
     font-size: 0.7rem;
     border: 0;
@@ -1013,70 +709,12 @@ nav {
         font-size: 0.9rem;
       }
     }
-    .responsabilities {
-      width: 100%;
-      form {
-        width: 15vw;
-        .responsabilities-input {
-          width: 98%;
-          input[type="week"] {
-            width: 100%;
-            height: 6vh;
-            padding: 0;
-            border: 0;
-            font-size: inherit;
-          }
-          input[type="week"]:focus {
-            outline: none;
-          }
-        }
-        button[type="submit"] {
-          height: 6vh;
-          margin-left: 1vw;
-          font-size: 0.7rem;
-          line-height: 0.4rem;
-        }
-      }
-    }
   }
   .dropdown-user {
-    margin-left: 0.2vw !important;
-  }
-  .dropdown-user--parent {
-    height: 7vh;
-    button {
-      height: 7vh;
-    }
-    .dropdown-user {
-      min-width: 55.1vw;
-      margin: 0;
-      padding: 0;
-      li {
-        height: 7vh;
-        margin: 0;
-        padding: 0 0.5vw;
-        line-height: 7vh;
-        list-style-type: none;
-      }
-      div {
-        margin: 0;
-        padding: 0;
-        .actived {
-          background-color: darken($moyen, 10%) !important;
-          color: white;
-        }
-        .dropdown-item {
-          a {
-            text-align: start;
-            font-size: 0.7rem;
-          }
-        }
-      }
-    }
+   //margin-left: 0.2vw !important;
   }
   section {
     position: absolute;
-   // margin-top: 7vh;
     a {
       display: block;
       min-width: 5vw;
@@ -1097,12 +735,12 @@ nav {
       }
     }
   }
-  #lineSearch, #lineClock {
+   #lineClock {
     //position: absolute;
     min-height: 7vh;
     margin-top: 1vh;
     z-index: 99;
-    #buttonSearch, #buttonClock {
+    #buttonClock {
       width: 5vw;
       line-height: 7vh;
       padding: 0;
@@ -1110,14 +748,14 @@ nav {
       text-align: center;
       font-size: 100%;
     }
-    .buttonSearchActive, .buttonClockActive {
+    .buttonClockActive {
       background-color: darken($moyen, 10%) !important;
       span {
         color: white !important;
       }
     }
-    #menuSearch, #menuClock {
-      min-width: 50vw;
+    #menuClock {
+      min-width: 47.2vw;
       padding-left: 2vw;
       line-height: 1.2rem;
     }

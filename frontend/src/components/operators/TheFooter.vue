@@ -1,20 +1,104 @@
 <template>
   <div class="bg-tools--ultradarken text-light pb-2 notselectable">
-    <div @mouseleave="mouseLeaveIn('close')">
+    <div class="landscape" @mouseleave="mouseLeaveIn('close')">
         <div v-if="caption" class="caption d-flex">
           <div class="menu bg-tools align-self-end fw-bold ps-1">
+            <div class="cursor" @click="dropdownItem('stock')">Stock</div>
             <div class="cursor" @click="dropdownItem('menus')">Menus</div>
             <div class="cursor" @click="dropdownItem('actions')">Actions</div>
             <div class="cursor" @click="dropdownItem('navigation')">Navigation</div>
           </div>
           <div
             v-if="
+              dropdown === 'stock' ||
               dropdown === 'menus' ||
               dropdown === 'actions' ||
               dropdown === 'navigation'
             "
             class="submenu bg-tools align-self-end"
           >
+            <table v-if="dropdown === 'stock'">
+              <tbody>
+                <tr v-for="dep in departements" :key="dep.family_description">
+                  <td colspan="2">
+                    <div class="d-flex">
+                      <span
+                        class="col1"
+                        :class="`icon-${dep.family_description
+                          .replace(/\s|_|\(|\)/g, '-')
+                          .normalize('NFD')
+                          .replace(/\p{Diacritic}/gu, '')
+                          .toLowerCase()} icon text-${dep.family_sass}--darken`"
+                      >
+                      </span>
+                      <span class="col10 fw-bold">
+                        {{ dep.family_description }}
+                      </span>
+                    </div>
+                    <div
+                  v-for="cat in dep.categories"
+                  :key="cat.category_id"
+                  class="d-flex"
+                >
+                  <span
+                    class="col1"
+                    :class="`icon-${cat.family_abbreviation}_${cat.category_id} icon text-${dep.family_sass}--darken`"
+                    :aria-label="cat.category_description"
+                  ></span>
+                  <span class="col10">
+                    {{ dep.family_description }}
+                    {{ cat.category_description }}</span
+                  >
+                </div>
+                  </td>
+                </tr>
+                <tr v-if="mobile">
+                  <td class="text-tools--ultradarken">
+                    <font-awesome-icon
+                      :icon="['fas', 'box']"
+                      aria-label="Conditionnement"
+                    />
+                  </td>
+                  <td>Conditionnement</td>
+                </tr>
+                <tr v-if="mobile">
+                  <td class="text-tools--ultradarken">
+                    <font-awesome-icon
+                      :icon="['fas', 'tractor']"
+                      aria-label="Culture"
+                    />
+                  </td>
+                  <td>Culture</td>
+                </tr>
+                <tr v-if="mobile">
+                  <td class="text-tools--ultradarken">
+                    <font-awesome-icon
+                      :icon="['fas', 'truck']"
+                      aria-label="Fournisseur"
+                    />
+                  </td>
+                  <td>Fournisseur</td>
+                </tr>
+                <tr>
+                  <td class="text-tools--ultradarken">
+                    <font-awesome-icon
+                      :icon="['fas', 'location-dot']"
+                      aria-label="Localisation"
+                    />
+                  </td>
+                  <td>Localisation</td>
+                </tr>
+                <tr v-if="mobile">
+                  <td class="text-tools--ultradarken">
+                    <font-awesome-icon
+                      :icon="['fas', 'scale-balanced']"
+                      aria-label="Mesure"
+                    />
+                  </td>
+                  <td>Mesure</td>
+                </tr>
+              </tbody>
+            </table>
             <table v-if="dropdown === 'menus'">
               <tbody>
                 <tr>
@@ -207,13 +291,16 @@
           </div>
         </div>
       </div>
-  <div class="footer">
+      <div class="footer-rotate"></div>
+      <div class="footer">
     <div class="row">
       <div class="col-lg-3 col-sm-1 col-1 text-center cursor" @click="captionClick">
         <div v-if="!mobile">
           Légendes
         </div>
-        <div v-else aria-label="Légendes" class="f-size"><font-awesome-icon :icon="['fas', 'comment']" /></div>
+        <div v-else aria-label="Légendes" class="f-size">
+          <font-awesome-icon :icon="['fas', 'comment']" />
+        </div>
       </div>
       <div class="col-lg-2 col-sm-1 col-1 text-center">
       <router-link
@@ -227,7 +314,8 @@
 <div v-if="!mobile">
          Aide 
         </div>
-        <div v-else aria-label="Aide" class="f-size"><font-awesome-icon :icon="['fas', 'circle-question']" /></div>
+        <div v-else aria-label="Aide" class="f-size">
+          <font-awesome-icon :icon="['fas', 'circle-question']" /></div>
       </router-link>
       </div>
       <div class="col-lg-2 col-sm-1 col-1">
@@ -242,7 +330,8 @@
 <div v-if="!mobile">
           A propos de nous
         </div>
-        <div v-else aria-label="A propos de nous" class="f-size"><font-awesome-icon :icon="['fas', 'circle-info']" /></div>
+        <div v-else aria-label="A propos de nous" class="f-size">
+          <font-awesome-icon :icon="['fas', 'circle-info']" /></div>
       </router-link>
       </div>
       <div class="col-lg-2 col-sm-1 col-1">   
@@ -292,7 +381,17 @@
 </template>
 
 <script>
+import StockService from '@/services/stock-service.js'
+import { ref } from 'vue'
+
 export default {
+  setup() {
+    const departements = ref([])
+    StockService.listDepartements().then(
+      (response) => (departements.value = response)
+    )
+    return { departements }
+  },
   data() {
     return {
       mobile: false,
@@ -365,6 +464,7 @@ export default {
 
 <style scoped lang="scss">
 @import "../../assets/sass/libs/variables.scss";
+@import "../../assets/sass/style.scss";
 .copyright {
   font-size: 12px;
 }
@@ -416,10 +516,14 @@ export default {
     }
 }
 @media #{$mobile-up} {
+  .footer-rotate {background-color: red;}
+
   .footer {
+    display: none;
     height: 6vh;
     overflow: hidden;
     padding: 1vw 4vw 0 4vw;
+    background-color: red;
   .f-size {
     font-size: 0.8rem;
   }

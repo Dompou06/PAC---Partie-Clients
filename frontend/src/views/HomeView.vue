@@ -5,7 +5,7 @@
   </div>
   <div v-else>
     <div v-if="orientation === 'landscape'" class="home"><TheHome /></div>
-    <div v-else class="home-portrait"><img src="../../src/assets/img/background/home.jpg"/></div>i
+    <div v-else class="home-rotate"></div>
   </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
   },
   watch: {
     /* orientation(newOrientation, oldOrientation) {
-      //console.log('newOrientation',newOrientation, 'oldOrientation',oldOrientation)
+      console.log('newOrientation',newOrientation, 'oldOrientation',oldOrientation)
     }*/
   },
   created() {
@@ -57,12 +57,6 @@ export default {
 @import "../assets/sass/libs/variables.scss";
 @import "../assets/sass/style.scss";
 
-//Pour desktop
-@media #{$desktop-up} {
-  .home {
- 
-  }
-}
 //Pour mobile paysage
 @media #{$mobile-down} {
   .home {
@@ -73,18 +67,4 @@ export default {
     width: 95vw;
   }
 }
-
-.home-portrait {
-  position: relative;
-  top: 5vh;
-  left: 9.8vw;
-  height: 95vh;
-  width: 91.3vw;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-
 </style>

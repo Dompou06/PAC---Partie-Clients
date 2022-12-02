@@ -239,6 +239,7 @@
 import StockService from '@/services/stock-service.js'
 import Product from './TheArticle.vue'
 import Pagination from './ThePagination.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'TheProducts',
@@ -287,6 +288,11 @@ export default {
       idCategory: '',
       idProduct: '',
     }
+  },
+  computed: {
+    ...mapGetters({
+      management: 'auth/management',
+    }),
   },
   watch: {
     //Si on est sur la page et on change de famille ou catégorie
@@ -341,6 +347,14 @@ export default {
             }
           }
         }
+      }
+    },
+    management(newManagement, oldManagent) {
+      //console.log(newManagement)
+      if (newManagement != 'Customer') {
+        this.$router.replace({
+          name: 'home',
+        })
       }
     },
   },
@@ -983,7 +997,7 @@ h2 {
 //Pour mobile portrait
 @media #{$mobile-up} {
   section {
-    top: 0;
+    top: 5vh;
     display: flex;
     display: -webkit-flex; /* Safari */
     flex-direction: column;

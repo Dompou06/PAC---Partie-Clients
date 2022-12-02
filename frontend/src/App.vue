@@ -348,15 +348,10 @@ footer {
     }*/
     .footer-o {
       position: absolute;
-      height: 6vh;
-      width: 100vh;
-      top: 83.5vw;
-      left: -47.5vh;
-      -webkit-transform: rotate(90deg) !important;
-      -moz-transform: rotate(90deg) !important;
-      -o-transform: rotate(90deg) !important;
-      -ms-transform: rotate(90deg) !important;
-      transform: rotate(90deg) !important;
+      height: 100vh;
+      width: 6vw;
+      top: 0;
+      left: 0;
     }
   }
  .header {
@@ -380,7 +375,7 @@ main {
   left: 0;
   width: 100vw;
   height: 86.5vh;*/
-  //background-color: red;
+//  background-color: red;
 }
 
 /*.main-rotated {
@@ -409,12 +404,12 @@ width: 100vw;
 }*/
 .main-rotared {
   top: 5vh !important;
-  left: 9.8vw;
+  left: 6vw;
   height: 95vh;
- // background-color: red;
+  background-color: red;
   img {
     height: 95vh;
-    width: 90.5vw;
+    width: 95vw;
   }
 }
 .footer-c {
