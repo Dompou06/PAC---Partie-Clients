@@ -354,9 +354,19 @@ export default {
       management: 'auth/management',
     }),
   },
+  watch: {
+    management(newManagement, oldManagent) {
+      //console.log(newManagement)  
+      if(newManagement != 'Customer') {
+        this.$router.replace({
+          name: 'home'
+        })
+      }
+    }
+  },
   mounted() { 
     //console.log('management', this.management)
-    if(this.management && this.management != 'customer') {
+    if(this.management && this.management != 'Customer') {
       this.$router.replace({
         name: 'home'
       })

@@ -95,13 +95,15 @@
                       <input
                         :id="`pu${article.id}`"
                         type="number"
-                        :value="article.pu.toFixed(2)"
+                        :value="article.ht"
                         class="hidden"
                       />
                       <input
                         :id="`price${article.id}`"
                         type="number"
-                        :value="article.pu.toFixed(2) * article.quantity"
+                        :value="
+                          (Number(article.pht) * article.quantity).toFixed(2)
+                        "
                         class="price-input text-end fw-bold"
                         disabled
                       /><span class="fw-bold euro"> €</span>
@@ -120,7 +122,9 @@
                       class="ms-landscape"
                       >Plus de détails
                     </router-link>
-                    <div class="price-mes text-end">{{ article.price }}</div>
+                    <div class="price-mes text-end">
+                      {{ `${article.pht} €/${article.presentation}` }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -130,15 +134,14 @@
         <div v-if="soldOut != ''" class="">
           <div v-for="(article, index) in soldOut" :key="index">
             <div :id="index" class="cart-item">
-              
               <div class="d-flex justify-content-between">
-<input
-                :id="`${index}-check`"
-                type="checkbox"
-                class="me-1"
-                checked
-              />                
-              <div class="flex-grow-1">
+                <input
+                  :id="`${index}-check`"
+                  type="checkbox"
+                  class="me-1"
+                  checked
+                />
+                <div class="flex-grow-1">
                   <h5>{{ article.name }} {{ article.variety }}</h5>
                 </div>
               </div>
@@ -163,13 +166,8 @@
                 </div>
                 <div class="me-landscape">
                   <div class="d-flex infos">
-                    <div class="quantity">
-                      <input
-                        :id="`quantity${article.id}`"
-                        type="number"
-                        class=""
-                        :value="`${article.quantity}`"
-                      />
+                    <div class="unavailable">
+                      <span class="fw-bold">Actuellement indisponible</span>
                       <button
                         class="share"
                         @click="deleteIt(`${article.id}, ${index}`)"
@@ -180,25 +178,22 @@
                         />
                       </button>
                     </div>
-                </div>
-                  <div class="ps-2">
-                   <span class="fw-bold">Actuellement indisponible</span><br/>
-                   <div>
-                   </div>
-                    <div class="dropdown similar">
-                      <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  </div>
+                  <div class="ps-2 similar">
+                    <router-link
+                      :to="{
+                        name: 'TheProducts',
+                        params: {
+                          linkType: `${article.departement}_products`,
+                        },
+                      }"
+                    >
+                      <button class="btn" type="button">
                         Articles similaires
                       </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li class=""><a class="dropdown-item" href="#">Action</a></li>
-                      </ul>
-                    </div>
+                    </router-link>
                   </div>
                 </div>
-
-
-
-                
               </div>
             </div>
           </div>
@@ -244,7 +239,7 @@
                   <span class="fw-bold"
                     >{{ article.name }} {{ article.variety }}</span
                   ><br />
-                  {{ article.price }}
+                  {{ `${article.pht} €/${article.presentation}` }}
                 </div>
                 <router-link
                   :to="{
@@ -325,7 +320,7 @@
                     <span class="fw-bold"
                       >{{ article.name }} {{ article.variety }}</span
                     ><br />
-                    {{ article.price }}
+                    {{ article.presentation }}
                   </div>
                   <router-link
                     :to="{
@@ -457,6 +452,14 @@ export default {
         localStorage.setItem('cart', JSON.stringify(localStorageCart))
       }
     },
+    management(newManagement, oldManagent) {
+      //console.log(newManagement)
+      if (newManagement != 'Customer') {
+        this.$router.replace({
+          name: 'home',
+        })
+      }
+    },
   },
   created() {
     window.addEventListener('resize', this.checkScreen)
@@ -478,20 +481,42 @@ export default {
       }
       //console.log('ref', ref)
       StockService.findCart(ref).then((response) => {
-        console.log('response', response)
+        //console.log('response', response)
         response.inStock.forEach((stock) => {
           let cart = value.find((item) => item.ref == stock.id_prod)
-          var regex = /[\d|.|\+]+/g
-          let pu = Number(cart.price.match(regex))
-          let split = cart.price.split(' €/')
-          let price = `(${pu.toFixed(2)} €/${split[1]}`
+          //var regex = /[\d|.|\+]+/g
+          // let pu = Number(cart.price.match(regex))
+          // let split = cart.price.split(' €/')
+          //let price = `(${pu.toFixed(2)} €/${split[1]}`
           if (cart) {
             //   console.log('cart', cart)
+            let pht = (
+              Number(stock.pf) +
+              (Number(stock.pf) * Number(stock.marge)) / 100
+            ).toFixed(2)
+            //console.log('pht', stock.departement)
+            let presentation = ''
+            if (stock.cond) {
+              presentation = `${stock.cond} - ${Number(stock.quantity).toFixed(
+                0
+              )} ${stock.mes}`
+            } else {
+              if (Number(stock.quantity) != 1) {
+                presentation = `${Number(stock.quantity).toFixed(0)} ${
+                  stock.mes
+                }`
+              } else {
+                presentation = stock.mes
+              }
+            }
             this.inStock.push({
               ...stock,
+              departement: stock.departement,
               image: cart.image,
-              pu: pu,
-              price: price,
+              pht: pht,
+              //  pu: pu,
+              presentation: presentation,
+              //price: price,
               quantity: cart.quantity,
               sass: cart.sass,
             })
@@ -507,34 +532,42 @@ export default {
         //console.log('this.inStock', this.inStock)
         let res = 0
         for (let i in this.inStock) {
-          res += this.inStock[i].pu * this.inStock[i].quantity
+          res += this.inStock[i].pht * this.inStock[i].quantity
         }
         //console.log('res', res.toFixed(2))
         this.totalHt = Number(res).toFixed(2)
         this.tva = ((Number(this.totalHt) * 20) / 100).toFixed(2)
         this.ttc = (Number(this.totalHt) + Number(this.tva)).toFixed(2)
-        /*this.inStock.reduce((acc, article) => {
-          let total = acc + (article.pu * article.quantity)
-          //total = parseFloat(total).toFixed(2)
-          // console.log('total', total)
-          this.totalHt = total.toFixed(2)
-          this.tva = ((total.toFixed(2)*20)/100).toFixed(2)
-          this.ttc = (total+((total.toFixed(2)*20)/100)).toFixed(2)
-        }, 0)*/
         // console.log('this.inStock', this.inStock)
         //console.log('response.discover', response.discover)
         response.discover.forEach((stock) => {
-          let pu = (
+          let pht = (
             Number(stock.pf) +
             (Number(stock.pf) * Number(stock.marge)) / 100
           ).toFixed(2)
-          let mes = ''
-          if (stock.mes) {
-            mes = stock.mes
+          let presentation = ''
+          if (stock.cond) {
+            if (stock.cond != 'vrac') {
+              presentation = `${stock.cond} - ${Number(stock.quantity).toFixed(
+                0
+              )} ${stock.mes}`
+            } else {
+              if (Number(stock.quantity) != 1) {
+                presentation = `${Number(stock.quantity).toFixed(0)} ${
+                  stock.mes
+                }`
+              } else {
+                presentation = stock.mes
+              }
+            }
           } else {
-            mes = stock.cond
+            if (Number(stock.quantity) != 1) {
+              presentation = `${Number(stock.quantity).toFixed(0)} ${stock.mes}`
+            } else {
+              presentation = stock.mes
+            }
           }
-          let price = `${pu} €/${mes}`
+          // let price = `${pht} €/${mes}`
           let split = stock.id_prod.split('_')
           let image = ''
           if (stock.variety) {
@@ -547,7 +580,9 @@ export default {
             departement: stock.departement,
             name: stock.name,
             variety: stock.variety,
-            price: price,
+            pht: pht,
+            presentation: presentation,
+            // price: price,
             image: image,
           })
         })
@@ -568,6 +603,7 @@ export default {
               // console.log('cart', cart.image)
               this.soldOut.push({
                 id: stock.id,
+                departement: stock.departement,
                 name: stock.name,
                 variety: stock.variety,
                 image: cart.image,
@@ -766,7 +802,8 @@ section {
             padding-left: 1vw;
           }
         }
-        .quantity {
+        .quantity,
+        .unavailable {
           width: 75%;
           padding-left: 5vw;
           button {
@@ -778,9 +815,9 @@ section {
             width: 40%;
           }
         }
-          .share {
-            margin: 0 0 0 2vw;
-            height: 2.55vw;
+        .share {
+          margin: 0 0 0 2vw;
+          height: 2.55vw;
         }
       }
       .ms-landscape {
@@ -837,6 +874,17 @@ section {
         padding: 1vh 1vw 0 0.5vw;
       }
     }
+    .similar {
+      // font-size: .7rem;
+      margin-left: 5vw;
+      .btn {
+        border-radius: 0;
+        // font-size: .7rem;
+      }
+      .btn:hover {
+        color: white;
+      }
+    }
   }
 }
 //Pour mobile portrait
@@ -877,8 +925,8 @@ section {
       padding: 0 2vw;
       overflow-y: auto;
       input[type="checkbox"] {
-        width: 2.5vw;
-        height: 2.5vw;
+        width: 5vw;
+        height: 5vw;
       }
       .cart-item {
         height: 15vh;
@@ -909,54 +957,71 @@ section {
       }
     }
     .departement {
-      position: absolute;
+      position: relative;
       width: 25vw;
       height: 25vw;
-      z-index: 90;
+      font-size: 25vw;
+      line-height: 0;
       img {
         width: 100%;
       }
     }
     .me-landscape {
-      margin-left: 25vw;
+      //margin-left: 25vw;
       height: 25vw;
       width: 75vw;
       .infos {
         width: 100%;
-        .quantity {
+        .quantity,
+        .unavailable {
           width: 80%;
           margin-left: 3vw;
-          button {
-            width: 3vh;
-            height: 3vh;
-            font-weight: 700;
-            text-align: center;
-            line-height: 0;
-          }
-          input {
-            width: 30%;
-            height: 3vh;
-            margin: 0 1vw;
-          }
-          .share {
-            width: 3vh;
-            height: 3vh;
-            padding: 0;
-            margin: 0 0 0 2vw;
-            line-height: 0;
-            text-align: center;
-            font-size: 0.6rem;
-          }
         }
-        .price {
-          width: 40%;
-          input {
-            width: 80%;
-            text-align: right;
-          }
-          .price-mes {
-            width: 100%;
-          }
+        button {
+          width: 3vh;
+          height: 3vh;
+          font-weight: 700;
+          text-align: center;
+          line-height: 0;
+        }
+        input {
+          width: 30%;
+          height: 3vh;
+          margin: 0 1vw;
+        }
+        .share {
+          width: 3vh;
+          height: 3vh;
+          padding: 0;
+          margin: 0 0 0 2vw;
+          line-height: 0;
+          text-align: center;
+          font-size: 0.6rem;
+        }
+      }
+      .price {
+        width: 40%;
+        input {
+          width: 80%;
+          text-align: right;
+        }
+        .price-mes {
+          width: 100%;
+        }
+      }
+      .unavailable {
+        span {
+          font-size: 0.7rem;
+        }
+      }
+      .similar {
+        font-size: 0.7rem;
+        .btn {
+          border-radius: 0;
+          font-size: 0.7rem;
+        }
+        .btn:focus {
+          color: white;
         }
       }
     }
@@ -1088,7 +1153,7 @@ section {
       }
     }
     .departement {
-      position: absolute;
+      position: relative;
       width: 13.3vw;
       height: 13.3vw;
       font-size: 12.8vw;
@@ -1099,11 +1164,12 @@ section {
       }
     }
     .me-landscape {
-      margin-left: 13vw;
+      //margin-left: 13vw;
       width: 77%;
       .infos {
         width: 100%;
-        .quantity {
+        .quantity,
+        .unavailable {
           width: 80%;
           margin-left: 3vw;
           button {
@@ -1169,20 +1235,9 @@ section {
     .similar {
       button {
         border-radius: 0;
-        font-size: .7rem;
+        font-size: 0.7rem;
         font-weight: 600;
         color: white;
-      }
-      .dropdown-menu {
-        font-size: .7rem;
-        border: 0;
-        padding: 0 0 0 1vw;
-        li {
-        .dropdown-item {
-        margin: 0;
-        padding: 0; 
-        }
-        }
       }
     }
   }

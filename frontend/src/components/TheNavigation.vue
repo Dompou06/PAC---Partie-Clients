@@ -13,20 +13,6 @@
       >
         <img src="../assets/img/nav_pac.png" alt="Accueil" />
       </router-link>
-      <!--<div
-        v-show="mobile"
-        v-if="role.indexOf(1) > -1"
-        class="nav-item col-sm-1"
-       >
-        <router-link to="/cart" class="nav-link">
-          <div class="text-start notselectable ps-2_5 nav-color">
-            <font-awesome-icon
-              :icon="['fas', 'cart-shopping']"
-              aria-label="Voir le panier"
-            />
-          </div>
-        </router-link>
-      </div>-->
       <button
         class="navbar-toggler"
         type="button"
@@ -39,12 +25,12 @@
       <transition v-if="!mobile">
         <div class="nav-d d-flex justify-content-between">
           <div
-           id="articlesd"
+            id="articlesd"
             class="dropdown"
             :class="{
-              buttonactive: sectionActive === 'products' || linkActive,
+              buttonactive: sectionActive === 'products',
             }"
-           >
+          >
             <button
               class="btn fw-bold"
               type="button"
@@ -110,8 +96,17 @@
           <div id="search" class="">
             <TheSearch />
           </div>
-          <div v-if="authenticated" class="d-flex">
-            <div class="dropdown">
+          <div
+            v-if="authenticated"
+            class="div-right d-flex justify-content-end"
+          >
+            <div
+              class="dropdown"
+              :class="{
+                buttonactive:
+                  sectionActive === 'user' || subLinkActive === 'profile',
+              }"
+            >
               <button
                 class="btn fw-bold"
                 type="button"
@@ -127,15 +122,29 @@
               <ul class="dropdown-menu" aria-labelledby="Options utilisateur">
                 <li v-for="item in roles.slice().reverse()" :key="item">
                   <div
+                    v-if="!roleActive"
                     class="dropdown-item nav-color fw-bold cursor"
                     :class="{ actived: item.active }"
                     @click="changeRole(item.role)"
                   >
                     {{ item.role }}
                   </div>
-                  <div v-if="item.role === 'Client'">
+                  <div
+                    v-else
+                    :class="{ actived: management === item.role }"
+                    class="dropdown-item nav-color fw-bold cursor"
+                    @click="changeRole(item.role)"
+                  >
+                    {{ item.role }}
+                  </div>
+                  <div v-if="item.active && !roleActive">
                     <router-link
-                      to="/profile"
+                      :to="{
+                        name: 'ProfileUser',
+                        params: {
+                          linkType: `${item.role}_profile__user`,
+                        },
+                      }"
                       class="dropdown-item nav-color fw-bold ps"
                     >
                       Mon compte
@@ -148,7 +157,8 @@
               </ul>
             </div>
             <div v-if="!roleActive" class="text-center">
-              <router-link to="/cart" class="nav-link root">
+              <TheNavCustomer :cart="cart.cart" />
+              <!--<router-link to="/cart" class="nav-link root">
                 <div class="notselectable cart-shopping">
                   <div class="cart-shopping--over">
                     <font-awesome-icon
@@ -160,281 +170,219 @@
                     <span v-if="cart.cart">{{ cart.cart }}</span><span v-else>0</span>
                   </div>
                 </div>
-              </router-link>
+              </router-link>-->
             </div>
           </div>
           <div v-else class="d-flex">
-            <router-link
-                    to="/signup"
-                    class="text-center fw-bold sign"
-                    >Inscription
-                  </router-link>
-                  <router-link
-                    to="/signin"
-                    class="text-center fw-bold sign"
-                    >Connexion
-                  </router-link>
+            <router-link to="/signup" class="text-center fw-bold sign"
+              >Inscription
+            </router-link>
+            <router-link to="/signin" class="text-center fw-bold sign"
+              >Connexion
+            </router-link>
           </div>
         </div>
       </transition>
       <!-- Menu mobile Portrait-->
       <transition v-else-if="mobileNav" name="mobile-nav">
-        <ul class="dropdown-nav navbar-nav">
-          <li>
-            <div class="d-flex justify-content-between">
-              <div
-                class="flex-fill nav-item dropdown subdropdown pt-1"
-                :class="{
-                  buttonactive: sectionActive === 'products' || linkActive,
-                }"
-              >
-                <button
-                  class="btn navdropdownButton notselectable h100"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  aria-label="Article"
+        <ul class="navbar-nav">
+          <li class="d-flex justify-content-between btn-group" role="group">
+            <button
+              type="button"
+              class="flex-fill btn"
+              :class="{ actived: sectionActive === 'products' }"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+             >
+              <span class=""
+                ><font-awesome-icon :icon="['fas', 'cart-arrow-down']" />
+              </span>
+            </button>
+            <ul class="dropdown-menu nav_bg" aria-labelledby="">
+              <li class="d-flex">
+                <div
+                  v-for="dep in departements"
+                  :key="dep.family_description"
+                  class="flex-fill"
                 >
-                  <span class="text-tools--ultradarken ps-3"
-                    ><font-awesome-icon :icon="['fas', 'cart-arrow-down']" />
-                  </span>
-                </button>
-                <ul
-                  class="dropdown-menu nav_bg mt-0"
-                  aria-labelledby="Menu Articles"
-                >
-                  <li class="">
-                    <div class="row ps-0 pe-0 subdropdown-menu nav_bg">
-                      <div
-                        v-for="dep in departements"
-                        :key="dep.family_description"
-                        class="col-4 ps-0 pe-0"
+                  <div
+                    :class="{
+                      familyborder: dep.family_id != 3,
+                      ps2: dep.family_id != 1,
+                    }"
+                  >
+                    <router-link
+                      :to="{
+                        name: 'TheProducts',
+                        params: {
+                          linkType: `${dep.family_id}__products`,
+                        },
+                      }"
+                      class="dropdown-item fw-bold"
+                      :class="{
+                        actived:
+                          dep.family_description === family ||
+                          linkActive === `${dep.family_id}`,
+                      }"
+                      :aria-label="`${dep.family_description}`"
+                      ><span
+                        class=""
+                        :class="{ ps2: dep.family_id === 1 }"
+                        @click="toggleMobileNav"
+                        >{{ dep.family_description }}</span
                       >
-                        <div :class="{ familyborder: dep.family_id != 3 }">
-                          <router-link
-                            :to="{
-                              name: 'TheProducts',
-                              params: {
-                                linkType: `${dep.family_id}__products`,
-                              },
-                            }"
-                            class="dropdown-item fw-bold"
-                            :class="{
-                              actived:
-                                dep.family_description === family ||
-                                linkActive === `${dep.family_id}`,
-                            }"
-                            :aria-label="`${dep.family_description}`"
-                            ><span
-                              class="ps-1"
-                              :class="{ ps2: dep.family_id === 1 }"
-                              @click="toggleMobileNav"
-                              >{{ dep.family_description }}</span
-                            >
-                          </router-link>
-                          <div
-                            v-for="cat in dep.categories"
-                            :key="cat"
-                            class="col-12"
+                    </router-link>
+                    <div v-for="cat in dep.categories" :key="cat">
+                      <div
+                        v-if="
+                          cat.family_abbreviation === dep.family_id &&
+                          cat.category_products === 'true'
+                        "
+                      >
+                        <router-link
+                          :to="{
+                            name: 'TheProducts',
+                            params: {
+                              linkType: `${dep.family_id}_${cat.category_id}_products`,
+                            },
+                          }"
+                          class="dropdown-item nav-color subcategory"
+                          :class="{
+                            actived:
+                              cat.category_abbreviation === category ||
+                              subLinkActive === `${cat.category_id}`,
+                          }"
+                          :aria-label="`${dep.family_description} ${cat.category_description}`"
+                        >
+                          <span
+                            class="ps-2 fw-bold"
+                            :class="{ ps3: dep.family_id === 1 }"
+                            @click="toggleMobileNav"
+                            >{{ cat.category_description }}</span
                           >
-                            <div
-                              v-if="
-                                cat.family_abbreviation === dep.family_id &&
-                                cat.category_products === 'true'
-                              "
-                            >
-                              <router-link
-                                :to="{
-                                  name: 'TheProducts',
-                                  params: {
-                                    linkType: `${dep.family_id}_${cat.category_id}_products`,
-                                  },
-                                }"
-                                class="dropdown-item nav-color subcategory"
-                                :class="{
-                                  actived:
-                                    cat.category_abbreviation === category ||
-                                    subLinkActive === `${cat.category_id}`,
-                                }"
-                                :aria-label="`${dep.family_description} ${cat.category_description}`"
-                              >
-                                <span
-                                  class="ps-2"
-                                  :class="{ ps3: dep.family_id === 1 }"
-                                  @click="toggleMobileNav"
-                                  >{{ cat.category_description }}</span
-                                >
-                              </router-link>
-                            </div>
-                          </div>
-                        </div>
+                        </router-link>
                       </div>
                     </div>
-                  </li>
-                </ul>
-              </div>
-              <div
-                class="flex-fill dropdown subdropdown pt-1"
-                @mouseleave="mouseLeaveMS"
-              >
-                <button
-                  id="buttonMS"
-                  class="btn navdropdownButton notselectable h100 text-center"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  aria-label="Rechercher"
-                  @click="mouseMS"
-                >
-                  <span class=""
-                    ><font-awesome-icon :icon="['fas', 'magnifying-glass']"
-                  /></span>
-                </button>
-                <ul
-                  class="dropdown-menu subdropdown-menu nav_bg"
-                  aria-labelledby="Menu Recherche"
-                >
-                  <li class="dropdown-item">
-                    <div class="subdropdown-search">
-                      <TheSearch @closeSearch="nofocusSearchMP" />
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div v-if="authenticated" class="flex-fill subdropdown">
-                <div class="d-flex">
-                  <div
-                    class="nav-item dropdown"
-                    :class="{ buttonactive: sectionActive === 'user' }"
-                  >
-                    <button
-                      class="btn navdropdownButton notselectable h100"
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      aria-label="Utilisateur"
-                    >
-                      <span class="text-tools--ultradarken ps-3"
-                        ><font-awesome-icon :icon="['fas', 'user']" />
-                      </span>
-                    </button>
-                    <ul
-                      class="dropdown-menu nav_bg"
-                      aria-labelledby="Menu Utilisateur"
-                    >
-                      <li class="dropdown-item subdropdown-menu">
-                        <div class="subdropdown-item nav_bg text-end">
-                          {{ user }}
-                        </div>
-                      </li>
-                      <li class="dropdown-item subdropdown-menu">
-                        <div
-                          class="
-                            d-flex
-                            justify-content-between
-                            subdropdown-item
-                            nav_bg
-                          "
-                        >
-                          <div
-                            v-for="item in roles.slice().reverse()"
-                            :key="item"
-                            class="p-0 subdropdown-role"
-                          >
-                            <div class="ps-1" @click="changeRole(item.role)">
-                              <div
-                                class="dropdown-item nav-color pt-0 text-center"
-                                :class="{ actived: linkActive === item.role }"
-                              >
-                                <div class="d-flex justify-content-start">
-                                  <div @click="toggleMobileNav">
-                                    <span
-                                      class="ps-2 pe-2"
-                                      :class="{
-                                        actived: item.role === 'Client',
-                                      }"
-                                      >{{ item.role }}</span
-                                    >
-                                  </div>
-                                  <div
-                                    v-if="item.role === 'Client'"
-                                    class="subdropdown-profile"
-                                  >
-                                    <div
-                                      :class="{
-                                        actived: subLinkActive === 'profile',
-                                      }"
-                                      class="dropdown-item"
-                                    >
-                                      <router-link
-                                        :to="{
-                                          name: 'ProfileUser',
-                                          params: {
-                                            linkType: `${item.role}_profile__user`,
-                                          },
-                                        }"
-                                      >
-                                        <span
-                                          class="ps-2"
-                                          @click="toggleMobileNav"
-                                          >Mon compte</span
-                                        >
-                                      </router-link>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            class="dropdown-item subdropdown-logout text-center"
-                            @click.prevent="logOut"
-                          >
-                            <font-awesome-icon
-                              :icon="['fas', 'right-from-bracket']"
-                              aria-label="Déconnexion"
-                              class=""
-                            />
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
                   </div>
                 </div>
-              </div>
-              <div v-else class="flex-fill d-flex subdropdown">
-                <router-link
-                  to="/signup"
-                  aria-label="Inscription"
-                  class="flex-fill text-center sign"
-                >
-                  <span class="icon-inscription"></span>
-                </router-link>
-
-                <router-link
-                  to="/signin"
-                  aria-label="Connexion"
-                  class="flex-fill text-center"
-                >
-                  <font-awesome-icon :icon="['fas', 'right-to-bracket']" />
-                </router-link>
-              </div>
-              <div v-if="authenticated && !roleActive" class="nav-item">
-                <router-link to="/cart" class="">
-                  <div class="cart-shopping">
-                    <div class="cart-shopping--over">
-                      <font-awesome-icon
-                        :icon="['fas', 'cart-shopping']"
-                        aria-label="Voir le panier"
-                        @click="closeDropdownUser"
-                      />
+              </li>
+            </ul>
+            <button
+              type="button"
+              class="flex-fill btn"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class=""
+                ><font-awesome-icon :icon="['fas', 'magnifying-glass']"
+              /></span>
+            </button>
+            <ul class="dropdown-menu nav_bg" aria-labelledby="">
+              <li class="li-search">
+                <TheSearch @closeSearch="toggleMobileNav" />
+              </li>
+            </ul>
+            <button
+              v-if="authenticated"
+              type="button"
+              class="flex-fill btn"
+              :class="{ actived: subLinkActive === 'profile' }"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+             >
+              <span class=""
+                ><font-awesome-icon :icon="['fas', 'user']"
+              /></span>
+            </button>
+            <ul class="dropdown-menu nav_bg" aria-labelledby="Menu Utilisateur">
+              <li class="dropdown-item">
+                <div class="nav_bg text-end fw-bold pe-3">
+                  {{ user }}
+                </div>
+              </li>
+              <li class="dropdown-item">
+                <div class="d-flex justify-content-between">
+                  <div
+                    v-for="item in roles.slice().reverse()"
+                    :key="item"
+                    class="flex-fill fw-bold"
+                  >
+                    <div v-if="!roleActive" class="ps-1 d-flex">
+                      <div
+                        :class="{ actived: item.active }"
+                        @click="changeRole(item.role)"
+                      >
+                        <span class="ps-2 pe-2">{{ item.role }} </span>
+                      </div>
+                      <div
+                        v-if="item.active && !roleActive"
+                        :class="{
+                          actived: subLinkActive === 'profile',
+                        }"
+                      >
+                        <router-link
+                          :to="{
+                            name: 'ProfileUser',
+                            params: {
+                              linkType: `${item.role}_profile__user`,
+                            },
+                          }"
+                          @click="toggleMobileNav"
+                        >
+                          <span class="ps-2 pe-2 fw-bold">Mon compte</span>
+                        </router-link>
+                      </div>
                     </div>
-                    <div class="cart-shopping--overlay">
-                      <span v-if="cart.cart">{{ cart.cart }}</span><span v-else>0</span>
+                    <div
+                      v-else
+                      class="ps-1 me-auto"
+                      @click="changeRole(item.role)"
+                    >
+                      <span class="ps-2 pe-2">{{ item.role }}</span>
                     </div>
                   </div>
-                </router-link>
-              </div>
+                  <div
+                    class="flex-fill dropdown-item text-center"
+                    @click.prevent="logOut"
+                  >
+                    <font-awesome-icon
+                      :icon="['fas', 'right-from-bracket']"
+                      aria-label="Déconnexion"
+                      class=""
+                    />
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <button
+              v-if="authenticated && !roleActive"
+              type="button"
+              class="btn btn-cart"
+              aria-expanded="false"
+              @mouseleave="toggleMobileNav"
+             >
+              <component
+                :is="switchComponent"
+                :cart="cart.cart"
+                @click="toggleMobileNav"
+              />
+            </button>
+            <div v-if="!authenticated" class="flex-fill d-flex subdropdown">
+              <router-link
+                to="/signup"
+                aria-label="Inscription"
+                class="flex-fill text-center sign"
+              >
+                <span class="icon-inscription"></span>
+              </router-link>
+
+              <router-link
+                to="/signin"
+                aria-label="Connexion"
+                class="flex-fill text-center"
+              >
+                <font-awesome-icon :icon="['fas', 'right-to-bracket']" />
+              </router-link>
             </div>
           </li>
         </ul>
@@ -449,7 +397,7 @@
       </router-link>
       <div
         class="dropend mt-2 align-self-start"
-        :class="{ buttonactive: sectionActive === 'products' || linkActive }"
+        :class="{ buttonactive: sectionActive === 'products' }"
       >
         <button
           type="button"
@@ -457,7 +405,7 @@
           data-bs-toggle="dropdown"
           data-bs-display="static"
           aria-expanded="false"
-          aria-label="Articles"
+          aria-label="Articles en stock"
           @click="closeDropdownUser"
         >
           <span class="text-tools--ultradarken"
@@ -542,7 +490,10 @@
       <section v-if="authenticated">
         <div
           class="dropend mt-2 align-self-start"
-          :class="{ buttonactive: sectionActive === 'user' }"
+          :class="{
+            buttonactive:
+              sectionActive === 'user' || subLinkActive === 'profile',
+          }"
         >
           <button
             type="button"
@@ -569,21 +520,25 @@
               :key="item"
               class="flex-fill p-0"
             >
-              <li
-                class="nav-color fw-bold pt-0"
-                :class="{ actived: linkActive === item.role }"
-              >
-                <div class="ps-1" @click="changeRole(item.role)">
-                  <span
-                    class="ps-2 pe-2"
-                    :class="{
-                      actived: item.role === 'Client',
-                    }"
-                    >{{ item.role }}</span
-                  >
+              <li class="nav-color fw-bold pt-0">
+                <div
+                  v-if="!roleActive"
+                  :class="{ actived: item.active }"
+                  class="ps-1"
+                  @click="changeRole(item.role)"
+                >
+                  <span class="ps-2 pe-2">{{ item.role }} </span>
+                </div>
+                <div
+                  v-else
+                  :class="{ actived: management === item.role }"
+                  class="ps-1"
+                  @click="changeRole(item.role)"
+                >
+                  <span class="ps-2 pe-2">{{ item.role }}</span>
                 </div>
               </li>
-              <div v-if="item.role === 'Client'">
+              <div v-if="item.active && !roleActive">
                 <li :class="{ actived: subLinkActive === 'profile' }">
                   <router-link
                     :to="{
@@ -593,7 +548,7 @@
                       },
                     }"
                   >
-                    <span class="ps-2">Mon compte</span>
+                    <span class="ps-2 fw-bold">Mon compte</span>
                   </router-link>
                 </li>
               </div>
@@ -607,36 +562,15 @@
             </div>
           </ul>
         </div>
-        <div
-          v-if="!roleActive"
-          class="text-center notselectable pt-2 nav-color"
-        >
-          <router-link v-if="cart.cart> 0" to="/cart" class="root">
-            <div class="cart-shopping">
-              <div class="cart-shopping--over">
-                <font-awesome-icon
-                  :icon="['fas', 'cart-shopping']"
-                  aria-label="Voir le panier"
-                  @click="closeDropdownUser"
-                />
-              </div>
-              <div class="cart-shopping--overlay"><span v-if="cart.cart">{{ cart.cart }}</span><span v-else>0</span></div>
-            </div>
-          </router-link>
-          <div v-else class="root">
-          <div class="cart-shopping">
-              <div class="cart-shopping--over">
-                <font-awesome-icon
-                  :icon="['fas', 'cart-shopping']"
-                  aria-label="Etat du panier"
-                />
-              </div>
-              <div class="cart-shopping--overlay">0</div>
-            </div>
-          </div>
+        <div class="text-center notselectable pt-2 nav-color">
+          <component
+            :is="switchComponent"
+            :cart="cart.cart"
+            @click="closeDropdownUser"
+          />
         </div>
       </section>
-      <section v-else class="">
+      <section v-else>
         <router-link
           to="/signup"
           class="signup nav_bg"
@@ -658,11 +592,13 @@ import StockService from '@/services/stock-service.js'
 import { ref } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import TheSearch from './TheSearch.vue'
+import TheNavCustomer from './customers/TheNavCart.vue'
 
 export default {
   name: 'TheNavigation',
   components: {
     TheSearch,
+    TheNavCustomer,
   },
   props: {
     currentDate: {
@@ -700,6 +636,7 @@ export default {
       jobActive: '',
       partActive: '',
       searchTerm: this.value,
+      switchComponent: 'TheNavCustomer',
     }
   },
   computed: {
@@ -707,8 +644,9 @@ export default {
       authenticated: 'auth/authenticated',
       user: 'auth/user',
       role: 'auth/role',
+      management: 'auth/management',
     }),
-    ...mapState(['cart'])
+    ...mapState(['cart']),
   },
   watch: {
     cart(newValue, oldValue) {
@@ -751,9 +689,13 @@ export default {
   mounted() {
     this.filterRoles(this.role)
     StockService.listCurrentDepartements()
-    if(localStorage.getItem('cart')) {
-      this.$store.dispatch('cart/updateCount', JSON.parse(localStorage.getItem('cart')).length)
+    if (localStorage.getItem('cart')) {
+      this.$store.dispatch(
+        'cart/showCount',
+        JSON.parse(localStorage.getItem('cart')).length
+      )
     }
+    this.checkScreen()
   },
   created() {
     window.addEventListener('resize', this.checkScreen)
@@ -781,7 +723,7 @@ export default {
       button.classList.toggle('buttonSearchActive')
     },
     filterRoles(value) {
-      // console.log('cart', this.cart)
+      // console.log('value', this.role)
       if (value.includes('Administrator') || value.includes('Manager')) {
         for (let i = 0; i < value.length; i++) {
           if (value[i] === 'Client') {
@@ -807,9 +749,18 @@ export default {
       }
     },
     changeRole(value) {
+      //console.log(value)
       this.sectionActive = 'user'
       this.linkActive = value
       this.changeManagement(value)
+      this.mobileNav = false
+      if (value != 'Client') {
+        this.roleActive = true
+      } else {
+        this.roleActive = false
+      }
+      //  console.log(this.$store.getters['auth/management'])
+      this.switchComponent = `TheNav${this.$store.getters['auth/management']}`
     },
     toggleMobileNav() {
       this.searchActive = !this.searchActive
@@ -832,12 +783,6 @@ export default {
     },
     searchEvent() {
       this.searchActive = !this.searchActive
-    },
-    mouseLeaveMS() {
-      document.getElementById('buttonMS').classList.remove('btn-search')
-    },
-    mouseMS() {
-      document.getElementById('buttonMS').classList.add('btn-search')
     },
     toggleDropdownUser() {
       this.dropdownUser = !this.dropdownUser
@@ -923,10 +868,7 @@ nav {
     font-size: 0.8rem;
     font-weight: 600;
     color: darken($tools, 65%);
-  }
-  .navdropdownButton {
-    text-align: left;
-    color: darken($tools, 65%) !important;
+    //text-align: left;
     width: 100%;
     border: 0;
   }
@@ -1033,12 +975,15 @@ nav {
     #articlesd {
       margin-right: 20%;
     }
+    .div-right {
+      width: 30%;
+    }
     .dropdown {
       button {
         height: 6.3vh;
         font-size: 0.8rem;
         color: darken($tools, 65%);
-     }
+      }
       .dropdown-menu {
         margin-top: 0;
         color: darken($tools, 65%);
@@ -1052,46 +997,21 @@ nav {
         }
       }
     }
-    .root{
-    height: 6.3vh;
-    .cart-shopping {
-    display: grid;
-    .cart-shopping--over {
-      font-size: 1.3rem;
-      line-height: 0;
+    .sign {
+      height: 6.3vh;
+      font-size: 0.8rem;
+      line-height: 6.3vh;
       color: darken($tools, 65%);
+      padding: 0 3vw;
     }
-    .cart-shopping--overlay {
-      margin-top: -0.5vh;
-      color: white;
-      font-weight: 800;
-    }
-    .cart-shopping--over,
-    .cart-shopping--overlay {
-      grid-area: 1 / 1;
-    }
-  }
-}
-  .sign {
-    height: 6.3vh;
-    font-size: 0.8rem;
-    line-height: 6.3vh;
-    color: darken($tools, 65%);
-    padding: 0 3vw;
-  }
-  .sign:hover {
-    background-color: darken($moyen, 10%) !important;
-    color: white !important;
-  }
-  .router-link-active {
-    background-color: darken($moyen, 10%) !important;
-    color: white !important;
-    .cart-shopping--over {
+    .sign:hover {
+      background-color: darken($moyen, 10%) !important;
       color: white !important;
-    }    .cart-shopping--overlay {
-      color: darken($tools, 65%) !important;
     }
-  }
+    .router-link-active {
+      background-color: darken($moyen, 10%) !important;
+      color: white !important;
+    }
   }
 }
 //Pour mobile portrait
@@ -1108,7 +1028,86 @@ nav {
     .navbar-toggler-icon {
       height: 5vh;
     }
-    .buttonactive {
+    .navbar-nav {
+      position: fixed;
+      top: 6.4vh;
+      left: 0;
+      height: 4.5vh;
+      width: 100vw;
+      background-color: $theme;
+      .btn {
+        // width: 100%;
+        height: 4.5vh;
+        padding: 0;
+      }
+      .btn-cart {
+        width: 5%;
+      }
+      button.show {
+        background-color: darken($moyen, 10%) !important;
+        color: white !important;
+      }
+      .actived {
+        background-color: darken($moyen, 10%) !important;
+        color: white !important;
+      }
+      .dropdown-menu {
+        position: absolute !important;
+        margin-top: -0.3vh !important;
+        width: 100vw;
+        padding: 0;
+        ul {
+          margin: 0;
+          padding: 0;
+          li {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+          }
+        }
+        .ps2 {
+          padding-left: 1vw;
+        }
+        .dropdown-item {
+          margin: 0;
+          padding: 0;
+          font-size: 0.7rem !important;
+          color: darken($tools, 65%);
+          a {
+            color: darken($tools, 65%);
+          }
+        }
+        .li-search {
+          margin: 0 25vw !important;
+        }
+        .router-link-active {
+          margin: 0 !important;
+          background-color: darken($moyen, 10%) !important;
+          color: white !important;
+        }
+        .actived {
+          //display: block;
+          background-color: darken($moyen, 10%) !important;
+          color: white !important;
+        }
+      }
+      .subdropdown {
+        top: -1vh;
+        width: 25vw;
+        height: 4.5vh;
+        a {
+          display: block;
+          height: 4.5vh;
+          color: darken($tools, 65%);
+          margin: 0 !important;
+          padding-top: 0.5vh;
+          .icon-inscription {
+            font-size: 2.2vh !important;
+          }
+        }
+      }
+    }
+    /*   .buttonactive {
       width: 25vw;
     }
   }
@@ -1146,7 +1145,7 @@ nav {
   .subdropdown {
     top: -1vh;
     width: 25vw;
-    height: 5.5vh;
+    height: 4.5vh;
     a {
       display: block;
       height: 4.5vh;
@@ -1163,8 +1162,13 @@ nav {
       color: white !important;
     }
     .btn-search {
+      height: 4.5vh;
       background-color: darken($moyen, 10%) !important;
       color: white !important;
+    }
+    .dropdown-user {
+      display: block;
+      left: -15vw !important;
     }
     .subdropdown-menu {
       width: 100vw;
@@ -1177,8 +1181,10 @@ nav {
         .subdropdown-role {
           width: 80vw;
           .subdropdown-profile {
+            height: 4.4vh;
             width: 35vw;
             text-align: center;
+            line-height: 3.5vh;
           }
 
           .subdropdown-logout {
@@ -1203,12 +1209,6 @@ nav {
     display: block;
     background-color: darken($moyen, 10%) !important;
     color: white !important;
-    .cart-shopping--over {
-      color: white;
-    }
-    .cart-shopping--overlay {
-      color: darken($tools, 65%);
-    }
   }
   .dropdown-item .router-link-active {
     display: block;
@@ -1227,26 +1227,8 @@ nav {
   }
   .btn {
     margin: 0 !important;
-    padding: 0 0 0 4vw !important;
-  }
-  .cart-shopping {
-    margin-top: -0.7vh;
-    height: 4.7vh;
-    width: 25vw;
-    display: grid;
-    padding: 0 3vw 0 0;
-    .cart-shopping--over {
-      color: darken($tools, 65%);
-      font-size: 1rem;
-    }
-    .cart-shopping--overlay {
-      color: white;
-      font-weight: 800;
-    }
-    .cart-shopping--over,
-    .cart-shopping--overlay {
-      grid-area: 1 / 1;
-    }
+    padding: 0 !important;
+  }*/
   }
 }
 //Pour mobile landscape
@@ -1274,6 +1256,15 @@ nav {
       height: 7.5vh;
       padding: 0 1.4vw 0 0.6vw;
       border-radius: 0;
+    }
+    .buttonactive {
+      button {
+        background-color: darken($moyen, 10%) !important;
+        width: 5vw !important;
+        span {
+          color: white !important;
+        }
+      }
     }
     .buttonsearchfocus {
       background-color: darken($moyen, 10%) !important;
@@ -1378,40 +1369,12 @@ nav {
       }
     }
   }
-  .root {
-    height: 7vh;
-  min-width: 5vw;
-  .cart-shopping {
-    height: 100%;
-    margin-left: -0.7vw;
-    display: grid;
-    .cart-shopping--over {
-      font-size: 3vw;
-    }
-    .cart-shopping--overlay {
-      font-size: 2vw;
-      color: white;
-      font-weight: 700;
-    }
-    .cart-shopping--over,
-    .cart-shopping--overlay {
-      grid-area: 1 / 1;
-    }
-  }
-    .nav-color {
-      .router-link-active {
-        background-color: darken($moyen, 10%) !important;
-        color: white !important;
-        max-height: 7vh !important;
-      }
-    }
-  }
   section {
     position: absolute;
     margin-top: 7vh;
     a {
       display: block;
-      min-width: 5.5vw;
+      min-width: 5vw;
       text-align: center;
       border-radius: 0;
       color: darken($tools, 65%);
@@ -1436,14 +1399,6 @@ nav {
       background-color: darken($moyen, 10%) !important;
       color: white !important;
       max-height: 7vh !important;
-      .cart-shopping {
-        .cart-shopping--over {
-          color: white !important;
-        }
-        .cart-shopping--overlay {
-          color: darken($tools, 65%) !important;
-        }
-      }
     }
     button[type="button"]:focus {
       background-color: darken($moyen, 10%) !important;
@@ -1456,6 +1411,7 @@ nav {
   #lineSearch {
     position: absolute;
     min-height: 7vh;
+    margin-top: 1vh;
     z-index: 99;
     #buttonSearch {
       width: 5vw;

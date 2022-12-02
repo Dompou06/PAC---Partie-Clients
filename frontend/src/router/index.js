@@ -10,6 +10,8 @@ import TheError from '../components/TheError.vue'
 import TheProducts from '../components/TheProducts.vue'
 import HomeView from '../views/HomeView.vue'
 
+import TheStock from '../components/operators/managers/TheStock.vue'
+
 const routes = [
   {
     path: '/',
@@ -61,6 +63,24 @@ const routes = [
     } 
   },
   {
+    path: '/stock',
+    name: 'TheStock',
+    component: TheStock,
+    beforeEnter: (to, from, next) => {
+      if(!store.getters['auth/role'].includes('Manager')) {
+        return next({
+          name: 'home'
+        })
+      }
+      next()
+    }
+  },
+  {
+    path: '/error',
+    name: 'TheError',
+    component: TheError
+  },
+  {
     path: '/about',
     name: 'about',
     // route level code-splitting
@@ -69,11 +89,6 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
-  {
-    path: '/error',
-    name: 'TheError',
-    component: TheError
-  }
 ]
 
 const router = createRouter({
