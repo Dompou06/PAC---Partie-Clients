@@ -136,7 +136,7 @@ const jobWeek = new CronJob('1 5 0 * * 1', () => {
 }, null, true)
 //Vérification que les planifications ont bien eu lieu
 //En cas de plantage de server le matin du lundi
-const jobVerifMonday = new CronJob('1 0 9 * * 1', () => {
+const jobVerifMonday = new CronJob('1 40 9 * * 1', () => {
     //console.log('lancement', lastWeek)
     const pathUser = `./app/dump/users/dumpUser${lastWeek}.sql`
     const pathStock = `./app/dump/stocks/dumpStock${lastWeek}.sql`

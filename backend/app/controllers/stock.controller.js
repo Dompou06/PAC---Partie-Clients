@@ -596,7 +596,7 @@ exports.findAllInCart = (req, res) => {
         },
         order: [['departement', 'ASC'], ['name', 'ASC']],
         attributes: {
-            exclude: ['user_id', 'clone', 'pf', 'marge', 'stock_arrival', 'stock_current', 'week', 'createdAt', 'updatedAt']
+            exclude: ['user_id', 'clone', 'stock_arrival', 'stock_current', 'week', 'createdAt', 'updatedAt']
         }
     }).then(inStock => {
         Stock.findAll({
@@ -625,7 +625,7 @@ exports.findAllInCart = (req, res) => {
                     order: [['departement', 'ASC'], ['name', 'ASC']],
                     group: 'id_prod',
                     attributes: {
-                        exclude: ['user_id', 'clone', 'pf', 'marge', 'stock_arrival', 'stock_current', 'week', 'createdAt', 'updatedAt']
+                        exclude: ['user_id', 'clone', 'stock_arrival', 'stock_current', 'week', 'createdAt', 'updatedAt']
                     }
                 }).then(soldOut => {
                     //   console.log('soldOut', soldOut)
