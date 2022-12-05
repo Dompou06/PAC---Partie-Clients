@@ -56,9 +56,7 @@ export default {
     async attempt({
       commit, state
     }, credential) {
-      //console.log('credential', credential)
       const token = credential.token
-      //console.log('token', token)
       if (token) {
         commit('SET_TOKEN', token)
         commit('SET_AUTHENTIFICADED', true)
@@ -73,7 +71,6 @@ export default {
               'x-access-token': token
             }
           })
-        //console.log('newtoken', response.data.token)
         const newtoken = response.data.token
         if(token != newtoken) {
           commit('SET_TOKEN', newtoken)
@@ -83,7 +80,6 @@ export default {
         commit('SET_USER', user)
         let role = response.data.roles.slice()
         commit('SET_ROLE', role)
-        //console.log('role', role)
         commit('SET_MANAGEMENT', null)
       } catch(err) {
         commit('SET_TOKEN', null)
@@ -107,7 +103,6 @@ export default {
     changeManagement: ({
       commit
     }, credential) => {
-      //console.log('credential', credential)
       if(credential === 'Client') {
         commit('SET_MANAGEMENT', 'Customer')
       } else {
@@ -115,7 +110,6 @@ export default {
       }
     },
     logout: ({ commit }) => {
-      //console.log('logoutin Store', commit)
       commit('SET_TOKEN', null)
       commit('SET_AUTHENTIFICADED', false)
       commit('SET_USER', null)

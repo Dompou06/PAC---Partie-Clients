@@ -11,7 +11,6 @@ const Rayon = db.rayon
 const Family = db.family
 
 const curr = new Date()
-//  console.log('getDay()', curr.getDay())
 let jan4 = new Date(curr.getFullYear(), 0, 4)
 let dayDiff = (curr - jan4) / 86400000
 let currentWeek = ''
@@ -30,7 +29,6 @@ exports.findAllDepartements = (req, res) => {
         attributes: { exclude: ['createdAt', 'updatedAt'] },
     })
         .then((response) => {
-            // console.log('response', response)
             Rayon.findAll({
                 attributes: {
                     exclude: ['category_text', 'createdAt', 'updatedAt']
@@ -40,7 +38,6 @@ exports.findAllDepartements = (req, res) => {
                 let categories = []
 
                 for (let n = 0; n < responseTwoo.length; n++) {
-                    //  console.log(responseTwoo[n].family_abbreviation, response[i].id)
                     categories.push({
                         category_id: responseTwoo[n].id,
                         family_abbreviation: responseTwoo[n].family_abbreviation,
@@ -50,7 +47,6 @@ exports.findAllDepartements = (req, res) => {
                         category_products: responseTwoo[n].products
                     })
                 }              
-                //console.log(categories)
                 for (let i = 0; i < response.length; i++) {
                     resultFamily.push({
                         family_id: response[i].id,
@@ -60,9 +56,7 @@ exports.findAllDepartements = (req, res) => {
                         categories: categories
                     })
                 }
-                //  console.log(resultFamily)
                 resultFamily.forEach(family => {
-                    //  console.log(family.categories)
                     let categories = family.categories 
                     function toFilter (element) {
                         if(element.family_abbreviation === family.family_id) {
@@ -71,7 +65,6 @@ exports.findAllDepartements = (req, res) => {
                     }
                     const filterCategory = categories.filter(toFilter)
                     if(filterCategory[0] != undefined && family.family_id === filterCategory[0].family_abbreviation) {
-                        // console.log(family.family_description+''+filterCategory)
                         family.categories = filterCategory
                     }
                 })
@@ -83,12 +76,10 @@ exports.findAllDepartements = (req, res) => {
         })
 }
 exports.findAllCurrentDepartements = (req, res) => {
-    // console.log('currentWeek', currentWeek)
     Family.findAll({
         attributes: { exclude: ['createdAt', 'updatedAt'] },
     })
         .then((response) => {
-            // console.log('response', response)
             Rayon.findAll({
                 attributes: {
                     exclude: ['category_text', 'createdAt', 'updatedAt']
@@ -112,9 +103,7 @@ exports.findAllCurrentDepartements = (req, res) => {
                             categoryId: split[1]
                         })
                     }                    
-                    //console.log('currFamilies', currFamilies)
                     for (let n = 0; n < responseTwoo.length; n++) {
-                    //  console.log(responseTwoo[n].family_abbreviation, response[i].id)
                         categories.push({
                             category_id: responseTwoo[n].id,
                             family_abbreviation: responseTwoo[n].family_abbreviation,
@@ -125,22 +114,17 @@ exports.findAllCurrentDepartements = (req, res) => {
                             catCurr: currFamilies
                         })
                     }              
-                    //console.log(categories)
                     const currentCategories = []
                     categories.forEach(category => {
                         let currCategories = category.catCurr
                         function toFilter (element) {
-                        //console.log(element.familyId)                           
-                        //console.log(family.family_id)                           
                             if(element.categoryId === category.category_id.toString()) {
-                            // console.log(element.familyId)                           
                                 return element.currCategories + ' ' + category.category_description
                             }
                         }
                     
                         const filterCurrCategory = currCategories.filter(toFilter)
                         if(filterCurrCategory[0] != undefined && category.category_id.toString() === filterCurrCategory[0].categoryId) {
-                            // console.log(family.family_description+''+filterCurrCategory)
                             currentCategories.push({
                                 category_id: category.category_id,
                                 family_abbreviation: category.family_abbreviation,
@@ -151,9 +135,6 @@ exports.findAllCurrentDepartements = (req, res) => {
                             })
                         }
                     })
-
-                    //  console.log('currentCategories', currentCategories)
-                    //console.log('categories', categories)
                     for (let i = 0; i < response.length; i++) {
                         resultFamily.push({
                             family_id: response[i].id,
@@ -163,10 +144,7 @@ exports.findAllCurrentDepartements = (req, res) => {
                             categories: currentCategories,
                         })
                     }
-                
-                    // console.log(resultFamily)
                     resultFamily.forEach(family => {
-                    //  console.log(family.categories)
                         let categories = family.categories                        
                         function toFilter (element) {
                             if(element.family_abbreviation === family.family_id) {
@@ -175,11 +153,9 @@ exports.findAllCurrentDepartements = (req, res) => {
                         }
                         const filterCategory = categories.filter(toFilter)
                         if(filterCategory[0] != undefined && family.family_id === filterCategory[0].family_abbreviation) {
-                        // console.log(family.family_description+''+filterCategory)
                             family.categories = filterCategory
                         }
                     })
-                    // console.log('resultFamily', resultFamily)
                     res.status(httpStatus.OK).send(resultFamily)
                 })
             })
@@ -189,7 +165,6 @@ exports.findAllCurrentDepartements = (req, res) => {
         })
 }
 exports.findDepartement = (req, res) => {    
-    //console.log('req', req.query)
     Rayon.findOne({
         where: {
             family_abbreviation: req.query.departement[0],
@@ -208,7 +183,6 @@ exports.findAllFamilies = (req, res) => {
     Family.findAll({
         attributes: { exclude: ['createdAt', 'updatedAt'] },
     }).then((response) => {
-    //console.log('response', response)
         let resultFamily = []
         for (let i = 0; i < response.length; i++) {
             resultFamily.push({
@@ -218,13 +192,11 @@ exports.findAllFamilies = (req, res) => {
                 family_sass: response[i].family_sass,
             })
         }
-        //console.log('resultFamily', resultFamily)
         res.status(httpStatus.OK).send(resultFamily)
     })
 }
 exports.findFamily = (req, res) => {
     const family_abbreviation = req.query.family_abbreviation
-    //console.log('family_abbreviation', family_abbreviation)
     Family.findOne({
         attributes: { exclude: ['createdAt', 'updatedAt'] },
         where: {
@@ -232,7 +204,6 @@ exports.findFamily = (req, res) => {
         },
     })
         .then((response) => {
-            // console.log('response', response)
             res.status(httpStatus.OK).send(response)
         })
         .catch((err) => {
@@ -246,7 +217,6 @@ exports.findAllCategories = (req, res) => {
     Rayon.findAll({
         attributes: { exclude: ['category_text', 'createdAt', 'updatedAt'] },
     }).then((response) => {
-    //console.log('response', response.articles)
         const resultCategory = []
         for (let i = 0; i < response.length; i++) {
             resultCategory.push({
@@ -259,23 +229,17 @@ exports.findAllCategories = (req, res) => {
                 rayon: `${response[i].family_abbreviation}_${response[i].category_abbreviation}`,
             })
         }
-        //console.log('resultCategory', resultCategory)
         res.status(httpStatus.OK).send(resultCategory)
     })
 }
 exports.findAllInCurrentFamily = (req, res) => {
-    // console.log('req', req.query)
     //1 si toute la gamme de response de la catégorie
     //< 1 si une seule gamme d'une catégorie
-    //console.log('lengthCat_prod', lengthCat_prod)
     if (req.query.rayon[2]) {
         const familyId = req.query.rayon[0]
         const categoryId = req.query.rayon[2]
         Rayon.findByPk(categoryId).then((response) => {
-            // console.log('response', response)
-            //  console.log('category', category)
             const departement = `${familyId}_${categoryId}`
-            //console.log('departement', departement)          
             Stock.findAll({
                 where: {
                     departement: departement,
@@ -287,7 +251,6 @@ exports.findAllInCurrentFamily = (req, res) => {
                 ],
             })
                 .then(allProducts => {
-                //    console.log('allProducts', allProducts)
                     const productsCurr = []
                     const varieties = []
                     for(let i in allProducts) {
@@ -351,7 +314,6 @@ exports.findAllInCurrentFamily = (req, res) => {
                         }
                         const filterVariety = varieties.filter(toFilter)
                         if(filterVariety[0] != undefined && product.idArticle === filterVariety[0].idArticle) {
-                            // console.log(family.family_description+''+filterCategory)    
                             product.idArticle = '',
                             product.idStock = '',
                             product.ref = '',
@@ -373,7 +335,6 @@ exports.findAllInCurrentFamily = (req, res) => {
                         }
                         return unique
                     },[])
-                    // console.log('productsReduce', productsReduce)
                     const result = [
                         {
                             category_id: response.id,
@@ -388,7 +349,6 @@ exports.findAllInCurrentFamily = (req, res) => {
         })
     } else {
         const family = req.query.rayon[0]
-        //console.log('family', family)
         Stock.findAll({
             where: {
                 departement: {
@@ -403,7 +363,6 @@ exports.findAllInCurrentFamily = (req, res) => {
             ],
         })
             .then(allProducts => {
-                //  console.log('allProducts', allProducts)   
                 const productsCurr = []
                 const varieties = []
                 const currCategories = []
@@ -473,7 +432,6 @@ exports.findAllInCurrentFamily = (req, res) => {
                     }
                     const filterVariety = varieties.filter(toFilter)
                     if(filterVariety[0] != undefined && product.idArticle === filterVariety[0].idArticle) {
-                        // console.log(family.family_description+''+filterCategory)    
                         product.idStock = '',
                         product.idArticle = '',
                         product.ref = '',
@@ -495,7 +453,6 @@ exports.findAllInCurrentFamily = (req, res) => {
                     }
                     return unique
                 },[])
-                //   console.log('newProducts', productsReduce)
                 Rayon.findAll({
                     where: {
                         family_abbreviation: family,
@@ -517,14 +474,9 @@ exports.findAllInCurrentFamily = (req, res) => {
                         categories.push(category)
                     }  
                     const resultCat = []                     
-                    // console.log('currCategories', currCategories)
-                    // console.log('categories', categories)
                     categories.forEach(el => {
-                        // console.log('el.cat_abbreviation', el.cat_abbreviation)
                         currCategories.forEach(e => {
-                            // console.log('e.categoryId', e.categoryId)
                             if(el.category_id.toString() === e.categoryId) {
-                                // console.log('e.categoryId', e.categoryId)
                                 resultCat.push({
                                     category_abbreviation: el.category_abbreviation,
                                     category_description: el.category_description,
@@ -536,7 +488,6 @@ exports.findAllInCurrentFamily = (req, res) => {
                             }
                         })
                     })
-                    //  console.log('resultCat', resultCat)
                     const products = []
                     resultCat.forEach(cat => {
                         productsReduce.forEach(prod => {
@@ -563,7 +514,6 @@ exports.findAllInCurrentFamily = (req, res) => {
                                 return e.name + ' ' + cat.category_description
                             }
                         }
-                        //  console.log('product', products)
                         const filterProduct = products.filter(prodToCat)
                         if(filterProduct[0] != undefined && cat.category_id.toString() === filterProduct[0].departement[2]) {
                             cat.products = filterProduct
@@ -577,16 +527,13 @@ exports.findAllInCurrentFamily = (req, res) => {
                         }
                         return unique
                     },[])
-                    //console.log('result', result)
                     res.status(httpStatus.OK).send({ result })                
                 }) 
             })
     }
 }
 exports.findAllInCart = (req, res) => {
-    // console.log('req', req.query.ref)
     const articles = req.query.ref  
-    // console.log('articles', articles)
     Stock.findAll({
         where: {
             id_prod: {
@@ -615,7 +562,6 @@ exports.findAllInCart = (req, res) => {
             if(inStock.length < articles.length) {
                 const notFound = articles.filter((cart) => 
                     inStock.filter((stock) => stock.id_prod === cart).length === 0)
-                //   console.log(notFound)
                 Stock.findAll({
                     where: {
                         id_prod: {
@@ -628,7 +574,6 @@ exports.findAllInCart = (req, res) => {
                         exclude: ['user_id', 'clone', 'stock_arrival', 'stock_current', 'week', 'createdAt', 'updatedAt']
                     }
                 }).then(soldOut => {
-                    //   console.log('soldOut', soldOut)
                     res.status(httpStatus.OK).send({ inStock, soldOut, discover })            
                 })
             } else {
@@ -638,11 +583,8 @@ exports.findAllInCart = (req, res) => {
     })
 }
 exports.findArticle = (req, res) => {
-    //console.log('req', req.query.type)
     const query = req.query
-    //  console.log('query', query.value)
     if(query.type === 'product') {
-        //console.log('value', query.value)      
         Stock.findOne({
             where: {
                 id: query.value,
@@ -650,7 +592,6 @@ exports.findArticle = (req, res) => {
             },
             attributes: { exclude: ['user_id', 'createdAt', 'updatedAt'] }
         }).then(response => {
-            //  console.log('response', response)
             res.status(httpStatus.OK).send({ response })
         })
             .catch((err) => {
@@ -660,14 +601,12 @@ exports.findArticle = (req, res) => {
             })
     } else {
         if(query.type === 'category') {
-            // console.log('value', query.value)
             Rayon.findOne({
                 where: {
                     id: query.value
                 },
                 attributes: { exclude: ['products', 'createdAt', 'updatedAt'] }
             }).then(response => {
-                // console.log('response', response)
                 res.status(httpStatus.OK).send({ response })
             })
                 .catch((err) => {
@@ -676,14 +615,12 @@ exports.findArticle = (req, res) => {
                         .send({ message: err.message })
                 })
         } else {
-            //console.log('value', query.value)
             Family.findOne({
                 where: {
                     id: query.value
                 },
                 attributes: { exclude: ['family_abbreviation', 'createdAt', 'updatedAt'] }
             }).then(response => {
-                // console.log('response', response)
                 res.status(httpStatus.OK).send({ response })
             })
                 .catch((err) => {
@@ -695,7 +632,6 @@ exports.findArticle = (req, res) => {
     }
 }
 exports.SearchAllWeekArticles = (req, res) => {
-    // console.log('req', req.query.search)
     Stock.findAll({
         where: {  
             week: currentWeek,  
@@ -721,7 +657,6 @@ exports.SearchAllWeekArticles = (req, res) => {
                     variety: response[i].variety,  
                 })
             }
-            // console.log('result', result)
             res.status(httpStatus.OK).send({ result })
         })
         .catch((err) => {
@@ -732,7 +667,6 @@ exports.SearchAllWeekArticles = (req, res) => {
 }
 exports.findStock = (req, res) => {
     const credential = req.query
-    //console.log('credential', credential.departement)
     Stock.findAll({
         where: {
             week: credential.week,
@@ -742,14 +676,11 @@ exports.findStock = (req, res) => {
         }
     })
         .then(products => {
-            //console.log('products', products)
             res.status(httpStatus.OK).send({ products })
-            //Pour l'exemple Projet AC Customer       
         })
 }
 exports.findDepartementsInStock = (req, res) => {
     const credential = req.query
-    //console.log('credential', credential)
     Stock.findAll({
         where: {
             week: credential.week,
@@ -760,7 +691,6 @@ exports.findDepartementsInStock = (req, res) => {
         group: ['departement']
     })
         .then(departements => {
-            // console.log('departements', departements)
             res.status(httpStatus.OK).send({ departements })
         })
 }

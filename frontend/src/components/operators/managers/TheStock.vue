@@ -1,15 +1,14 @@
 <template>
-    <div>
-        <div class="home-rotate"></div>
-        <div class="container">
-        <header class="d-flex">
-            <div><font-awesome-icon :icon="['fas', 'caret-left']" /></div>
-            <div>
-                 {{ semaine }} {{ year }}</div>
-            <div><font-awesome-icon :icon="['fas', 'caret-right']" /></div>
-        </header>
+  <div>
+    <div class="home-rotate"></div>
+    <div class="container">
+      <header class="d-flex">
+        <div><font-awesome-icon :icon="['fas', 'caret-left']" /></div>
+        <div>{{ semaine }} {{ year }}</div>
+        <div><font-awesome-icon :icon="['fas', 'caret-right']" /></div>
+      </header>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -35,15 +34,15 @@ export default {
       let dayDiff = (curr - jan4) / 86400000
       if (new Date(curr.getFullYear(), 0, 1).getDay() < 5) {
         this.semaine = 1 + Math.ceil(dayDiff / 7)
-        this.week = 'W'+(1 + Math.ceil(dayDiff / 7))
+        this.week = 'W' + (1 + Math.ceil(dayDiff / 7))
         this.weeknow = `${this.year}-W${1 + Math.ceil(dayDiff / 7)}`
       } else {
         this.semaine = Math.ceil(dayDiff / 7)
-        this.week = 'W'+(Math.ceil(dayDiff / 7))
+        this.week = 'W' + Math.ceil(dayDiff / 7)
         this.weeknow = `${this.year}-W${Math.ceil(dayDiff / 7)}`
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -53,20 +52,20 @@ export default {
 
 //Pour desktop
 @media #{$desktop-up} {
-    .home-rotate {
-        display: none;
-    }
+  .home-rotate {
+    display: none;
+  }
 }
 //Pour mobile portrait
 @media #{$mobile-up} {
-    .container {
-        display: none;
-    }
+  .container {
+    display: none;
+  }
 }
 //Pour mobile landscape
 @media #{$mobile-down} {
-    .home-rotate {
-        display: none;
-    }
+  .home-rotate {
+    display: none;
+  }
 }
 </style>

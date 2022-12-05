@@ -453,7 +453,6 @@ export default {
       }
     },
     management(newManagement, oldManagent) {
-      //console.log(newManagement)
       if (newManagement != 'Customer') {
         this.$router.replace({
           name: 'home',
@@ -464,7 +463,6 @@ export default {
   created() {
     window.addEventListener('resize', this.checkScreen)
     this.checkScreen()
-    //const value = document.getElementById('`quantity${article.id}`')
   },
   mounted() {
     if (localStorage.cart) {
@@ -474,27 +472,18 @@ export default {
   },
   methods: {
     find(value) {
-      //console.log('value', value)
       const ref = []
       for (let i in value) {
         ref.push(value[i].ref)
       }
-      //console.log('ref', ref)
       StockService.findCart(ref).then((response) => {
-        //console.log('response', response)
         response.inStock.forEach((stock) => {
           let cart = value.find((item) => item.ref == stock.id_prod)
-          //var regex = /[\d|.|\+]+/g
-          // let pu = Number(cart.price.match(regex))
-          // let split = cart.price.split(' €/')
-          //let price = `(${pu.toFixed(2)} €/${split[1]}`
           if (cart) {
-            //   console.log('cart', cart)
             let pht = (
               Number(stock.pf) +
               (Number(stock.pf) * Number(stock.marge)) / 100
             ).toFixed(2)
-            //console.log('pht', stock.departement)
             let presentation = ''
             if (stock.cond) {
               presentation = `${stock.cond} - ${Number(stock.quantity).toFixed(
@@ -514,32 +503,25 @@ export default {
               departement: stock.departement,
               image: cart.image,
               pht: pht,
-              //  pu: pu,
               presentation: presentation,
-              //price: price,
               quantity: cart.quantity,
               sass: cart.sass,
             })
             this.count = Number(this.count) + Number(cart.quantity)
           }
         })
-        //console.log('this.count', this.count)
         if (this.count > 1) {
           document.getElementById('articles').innerHTML = 's'
         } else {
           document.getElementById('articles').innerHTML = ''
         }
-        //console.log('this.inStock', this.inStock)
         let res = 0
         for (let i in this.inStock) {
           res += this.inStock[i].pht * this.inStock[i].quantity
         }
-        //console.log('res', res.toFixed(2))
         this.totalHt = Number(res).toFixed(2)
         this.tva = ((Number(this.totalHt) * 20) / 100).toFixed(2)
         this.ttc = (Number(this.totalHt) + Number(this.tva)).toFixed(2)
-        // console.log('this.inStock', this.inStock)
-        //console.log('response.discover', response.discover)
         response.discover.forEach((stock) => {
           let pht = (
             Number(stock.pf) +
@@ -567,7 +549,6 @@ export default {
               presentation = stock.mes
             }
           }
-          // let price = `${pht} €/${mes}`
           let split = stock.id_prod.split('_')
           let image = ''
           if (stock.variety) {
@@ -582,12 +563,10 @@ export default {
             variety: stock.variety,
             pht: pht,
             presentation: presentation,
-            // price: price,
             image: image,
           })
         })
         if (this.orientation === true) {
-          //console.log('this.orientation', this.orientation)
           this.discoverLength = this.discover.length
           const wLength = document.getElementById('wlength')
           this.left = 0
@@ -600,7 +579,6 @@ export default {
           response.soldOut.forEach((stock) => {
             let cart = value.find((item) => item.ref == stock.id_prod)
             if (cart) {
-              // console.log('cart', cart.image)
               this.soldOut.push({
                 id: stock.id,
                 departement: stock.departement,
@@ -613,18 +591,15 @@ export default {
               })
             }
           })
-          //console.log('this.soldOut', this.soldOut)
         }
       })
     },
     getImage(file) {
-      //    console.log('file', file)
       let image = ''
       try {
         image = require.context('../assets/img/products/', false, /\.jpg$/)
         return image('./' + file + '.jpg')
       } catch (error) {
-        //return this.imageIn = false
         return (image = '')
       }
     },
@@ -652,24 +627,16 @@ export default {
       }
     },
     increment(value) {
-      // console.log(value)
       const pu = document.getElementById(`pu${value}`).value
       const quantity = document.getElementById(`quantity${value}`).value
       this.counter = `${value},${pu},${Number(1)},${quantity}`
-      //console.log(this.counter)
     },
     decrement(value) {
-      //console.log(value)
       const pu = document.getElementById(`pu${value}`).value
       const quantity = document.getElementById(`quantity${value}`).value
-      //this.counter = ''
       this.counter = `${value},${pu},${Number(-1)},${quantity}`
-      // console.log(this.counter)
-      // console.log('1', this.count)
-      // console.log('2', this.count)
     },
     deleteIt(value) {
-      //console.log('value', value)
       const split = value.split(', ')
       this.counter = `${split[0]},${split[1]},${Number(0)},${Number(
         0
@@ -677,12 +644,9 @@ export default {
       this.$store.dispatch('cart/updateCount', Number(-1))
     },
     move(value) {
-      //console.log('value', value)
       const wLength = document.getElementById('wlength')
       let widthWLength = Number(wLength.style.width.replace('%', ''))
       this.left = Number(wLength.style.left.replace('%', ''))
-      //  console.log('left', this.left)
-      // console.log('width', widthWLength)
       if (value === 'right') {
         if (this.left >= -(widthWLength - 75)) {
           wLength.style.left = `${this.left - 39}%`
@@ -695,21 +659,15 @@ export default {
           this.left = `${this.left + 39}`
         }
       }
-      //  console.log('left2', this.left)
       if (this.left != 0) {
         document.getElementById('arrow-left').classList.remove('disabled')
-        //console.log('yes', this.left)
       } else {
         document.getElementById('arrow-left').classList.add('disabled')
-        // console.log('no', this.left)
       }
-
       if (this.left != -(widthWLength - 75)) {
         document.getElementById('arrow-right').classList.remove('disabled')
-        // console.log('yes', this.left)
       } else {
         document.getElementById('arrow-right').classList.add('disabled')
-        //  console.log('no', this.left)
       }
     },
   },
@@ -875,11 +833,9 @@ section {
       }
     }
     .similar {
-      // font-size: .7rem;
       margin-left: 5vw;
       .btn {
         border-radius: 0;
-        // font-size: .7rem;
       }
       .btn:hover {
         color: white;
@@ -967,7 +923,6 @@ section {
       }
     }
     .me-landscape {
-      //margin-left: 25vw;
       height: 25vw;
       width: 75vw;
       .infos {
@@ -1034,7 +989,6 @@ section {
           width: 85%;
           overflow-x: hidden;
           #wlength {
-            // width: 220vw;
             position: relative;
             display: flex;
             left: 0%;
@@ -1164,7 +1118,6 @@ section {
       }
     }
     .me-landscape {
-      //margin-left: 13vw;
       width: 77%;
       .infos {
         width: 100%;

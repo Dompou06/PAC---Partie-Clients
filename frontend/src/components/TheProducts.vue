@@ -298,59 +298,43 @@ export default {
     //Si on est sur la page et on change de famille ou catégorie
     $route(to) {
       if (to.params.linkType) {
-      //  console.log('to.params.linkType', to.params.linkType)
         this.totalrecords = 0
-        // this.pageCount = 1
         this.currentPage = 1
         this.firstItem = 0
-        //this.lastItem = 0
 
-        //  this.cat_prod = ''
         this.catOne = []
         this.catTwoo = []
         this.catThree = []
         const productType = to.params.linkType
-        // console.log('productType', productType)
         //Changement de famille ou de catégorie
         const splitProductType = productType.split('_')
         const familyId = Number(splitProductType[0])
-        // const splitProductTypeLength = splitProductType.length
-        // console.log('this.departements', this.departements)
         this.idFamily = splitProductType[0]
         this.idCategory = splitProductType[1]
         this.idProduct = splitProductType[2]
-        // console.log('this.idFamily', this.idFamily)
-        //console.log('this.idCategory', this.idCategory)
-
         for (let i = 0; i < this.departements.length; i++) {
-          //  console.log('desc', this.departements[i].family_id)
           if (this.departements[i].family_id === familyId) {
             this.family = this.departements[i].family_description
             this.familySass = this.departements[i].family_sass
             this.categories = this.departements[i].categories
-            // if (splitProductTypeLength > 2) {
             if (splitProductType[1]) {
-              // console.log('this.departements[i].family_id', this.departements[i].family_id, 'splitProductType', Number(splitProductType[1]))
               this.showArticles(
                 `${this.departements[i].family_id}_${Number(
                   splitProductType[1]
                 )}`
               )
               if (splitProductType[2] != 'products') {
-                // console.log('splitProductType[2]', splitProductType[2])
                 this.idProduct = splitProductType[2]
               }
             } else {
               this.showArticles(this.departements[i].family_id)
               this.category = ''
-              // console.log('this.category', this.category)
             }
           }
         }
       }
     },
-    management(newManagement, oldManagent) {
-      //console.log(newManagement)
+    management(newManagement) {
       if (newManagement != 'Customer') {
         this.$router.replace({
           name: 'home',
@@ -401,7 +385,6 @@ export default {
     this.checkScreen()
     if (this.$route.params.linkType) {
       const productType = this.$route.params.linkType
-      //  console.log('productType', productType)
       const split = productType.split('_')
       this.idFamily = split[0]
       this.idCategory = split[1]
@@ -410,18 +393,12 @@ export default {
   },
   methods: {
     toArticle(value) {
-      // console.log('value', value)
       this.idProduct = value
     },
     showArticles(value) {
-      //console.log('value4', value)
       StockService.listWeekArticles(value).then((response) => {
-        //console.log('response', response)
-        // console.log('response.length', response.length)
         if (response.length > 1) {
           //C'est une famille
-          //console.log('response', response[0])
-          //console.log('response', response)
           let catOneProducts = 0
           let catTwooProducts = 0
           let catThreeProducts = 0
@@ -448,11 +425,6 @@ export default {
           }
           this.totalrecords =
             catOneProducts + catTwooProducts + catThreeProducts
-          //console.log('this.totalrecords', this.totalrecords)
-          // console.log('this.catOne', this.catOne)
-          //console.log('this.catOne.products', this.catOne.products)
-          //console.log('this.catTwoo.products', this.catTwoo.products)
-          //  console.log('this.visibleItemsPerPageCount', this.visibleItemsPerPageCount)
           if (this.catOne.products.length < this.visibleItemsPerPageCount) {
             this.catOne = response[0]
             this.catOneItems = true
@@ -479,7 +451,6 @@ export default {
             this.catThreeItems = false
           }
         } else {
-          // console.log('response', response)
           this.category = response[0].category_description
           this.catOneItems = true
           this.catTwooItems = false
@@ -487,24 +458,17 @@ export default {
           this.catOne = response[0]
           this.catTwoo = []
           this.catThree = []
-          //  console.log('this.catOne', this.catOne)
           this.totalrecords = this.catOne.products.length
-          //console.log('this.totalrecords', this.totalrecords)
-          // console.log('this.visibleItemsPerPageCount', this.visibleItemsPerPageCount)
-          //console.log('this.pageCount', this.pageCount)
         }
         this.pageCount = Math.ceil(
           this.totalrecords / this.visibleItemsPerPageCount
         )
         this.lastItem = this.visibleItemsPerPageCount
         this.departementsSave = response
-        // console.log('this.departementsSave', this.departementsSave)
       })
     },
     pageChangeHandle(value) {
-      //  console.log('value', value)
       const catOneLenght = this.departementsSave[0].products.length
-      //console.log('this.departementsSave.length', this.departementsSave.length)
       this.currentPage = Number(this.currentPage)
       switch (value) {
       case 'next':
@@ -517,7 +481,6 @@ export default {
         this.currentPage = Number(value)
       }
       this.lastItem = this.visibleItemsPerPageCount * this.currentPage
-      //console.log('this.lastItem', this.lastItem)
       if (this.currentPage != 1) {
         const pageCurrent =
           (this.currentPage - 1) * (this.visibleItemsPerPageCount - 1) +
@@ -537,7 +500,6 @@ export default {
             0
           ) {
             //Si le nombre de lignes disponib!e est inférieur à 7
-            //  console.log('ici')
             this.catOneItems = false
             this.catTwooItems = true
             this.firstItemTwoo = this.firstItem - this.firstItemOne
@@ -590,8 +552,6 @@ export default {
         }
       } else {
         this.firstItem = 0
-        // console.log('catOneLenght', catOneLenght)
-        // console.log('catTwooLenght', catTwooLenght)
         if (catOneLenght > this.lastItem) {
           this.catOneItems = true
           this.catTwooItems = false
@@ -610,7 +570,6 @@ export default {
       }
     },
     computedItems(payload) {
-      // console.log(payload)
       this.page = payload.page
       this.perPage = payload.perPage
       this.lastItem = this.perPage * this.page
@@ -619,18 +578,13 @@ export default {
       } else {
         this.firstItem = 0
       }
-      //console.log('this.page', this.page, 'this.perPage', this.perPage)
       const slice = this.items.slice(this.firstItem, this.lastItem)
       this.slices = this.items.slice(this.firstItem, this.lastItem)
-      //console.log('firstItem', this.firstItem, 'lastItem', this.lastItem)
-      //console.log('slice', slice)
     },
     toggleMobileNav() {
       this.mobileNav = !this.mobileNav
     },
     checkScreen() {
-      // console.log('this.catOne', this.catOne)
-      //console.log('this.allItems', this.allItems)
       this.windowWidth = window.innerWidth
       if (this.windowWidth <= 768) {
         let screenOrientation =
@@ -736,10 +690,6 @@ export default {
             return
           }
         } else {
-          //Mobile landscape
-          //console.log('this.allItems', this.allItems)
-          //console.log('this.catOne', this.catOne)
-          //console.log('screenOrientation2', screenOrientation)
           if (!this.catOne) {
             //Affichage d'une catégorie
             this.orientation = false
@@ -750,11 +700,9 @@ export default {
             for (let i = 0; i < this.visibleItemsPerPageCount; i++) {
               this.items.push(this.allItems[i])
             }
-            //console.log('this.items', this.items)
             return
           } else {
             //Affichage d'une famille
-            //console.log('this.catOne', this.catOne)
             this.orientation = true
             this.mobile = true
             this.visibleItemsPerPageCount = 10
@@ -765,7 +713,6 @@ export default {
             this.itemsOne.length = 0
             this.itemsTwoo.length = 0
             this.itemsThree.length = 0
-            //console.log('this.allItems2', this.allItems)
             for (let i = 0; i < this.allItems.length; i++) {
               if (this.catOne.cat === this.allItems[i].cat_prod) {
                 itemsOne.push(this.allItems[i])
@@ -785,14 +732,12 @@ export default {
                     itemsTwoo.push(this.allItems[i])
                   }
                 }
-                //console.log('this.itemsTwoo', this.itemsTwoo)
                 const differenceTwoo =
                   this.visibleItemsPerPageCount - this.itemsOne.length
                 if (itemsTwoo.length >= differenceTwoo) {
                   for (let i = 0; i < differenceTwoo; i++) {
                     this.itemsTwoo.push(itemsTwoo[i])
                   }
-                  //console.log('this.itemsTwoo', this.itemsTwoo)
                 } else {
                   for (let i = 0; i < itemsTwoo.length; i++) {
                     this.itemsTwoo.push(itemsTwoo[i])
@@ -828,8 +773,6 @@ export default {
                 this.visibleItemsPerPageCount = this.itemsOne.length
               }
             }
-            // console.log('this.itemsOne', this.itemsOne)
-            //console.log('this.itemsTwoo', this.itemsTwoo)
             return
           }
         }
@@ -910,7 +853,6 @@ h2 {
 .text-infos {
   position: relative;
 }
-
 //Pour desktop
 @media #{$desktop-up} {
   section {
@@ -1009,7 +951,6 @@ h2 {
       height: 5vh;
       button {
         line-height: 2.5vh;
-        //margin-top: -2.5vh;
       }
     }
   }
@@ -1025,7 +966,6 @@ h2 {
   }
   .icon {
     width: 100vw;
-    //margin-top: 1.9vh;
     text-align: center;
   }
   .icon-legumes {
@@ -1038,7 +978,6 @@ h2 {
     font-size: 31.5vh;
   }
   h2 {
-
     font-size: 2.8vh;
   }
   .dropdown-menu--left {

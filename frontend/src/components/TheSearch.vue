@@ -96,12 +96,9 @@ export default {
       return
     },
     filterProducts(value) {
-      //  console.log('value', value)
       if (value != '') {
         StockService.searchWeekArticles(value).then((response) => {
-          //console.log('response', response)
           this.filteredProducts = response.result
-          // console.log('this.filteredProducts', this.filteredProducts)
         })
       } else {
         this.filteredProducts = ''
@@ -143,7 +140,6 @@ div {
   ul {
     width: 100%;
     list-style: none !important;
-    //margin-left: -4vw !important;
     background-color: white;
     li a {
       font-weight: 700;
@@ -167,7 +163,6 @@ div {
     ul {
       padding-left: 0 !important;
       li {
-        //margin-left: -9vw !important;
         font-size: 0.8rem;
       }
     }
@@ -177,12 +172,9 @@ div {
 @media #{$mobile-up} {
   div {
     position: relative;
-    //top: -0.5vh;
-    //left: -35vw;
     width: 70vw;
     button {
       position: relative;
-      //left: 25vw !important;
       input {
         height: 4.5vh;
       }
@@ -192,7 +184,7 @@ div {
     }
     ul {
       margin-left: 0 !important;
-      font-size: .7rem;
+      font-size: 0.7rem;
     }
   }
 }
@@ -202,7 +194,6 @@ div {
     height: 7.7vh;
     padding-left: 1vw;
     input {
-      // margin-top: 1.5vh;
       border: none;
       height: 7.7vh;
       line-height: 3vh;
@@ -227,4 +218,3 @@ div {
   }
 }
 </style>
-;

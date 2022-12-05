@@ -149,7 +149,7 @@ export default {
         token
       })
       .then(response => {
-        // console.log('response', response)
+        // console.log(response)        
         const contact = {
           mobile: response.data.userObject.mobile,
           phone: response.data.userObject.phone,
@@ -162,7 +162,7 @@ export default {
           billing_address: response.data.userObject.billing_address,
           delivery_address: response.data.userObject.delivery_address
         }
-        return contact
+        return contact 
       })
       .catch(() => {
         return 'Erreur Server'
