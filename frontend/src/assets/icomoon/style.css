@@ -1,0 +1,201 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?nk5gl0');
+  src:  url('fonts/icomoon.eot?nk5gl0#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?nk5gl0') format('truetype'),
+    url('fonts/icomoon.woff?nk5gl0') format('woff'),
+    url('fonts/icomoon.svg?nk5gl0#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-departement:before {
+  content: "\e903";
+}
+.icon-inscription:before {
+  content: "\e939";
+}
+.icon-autre:before {
+  content: "\e930";
+}
+.icon-hyper_marche:before {
+  content: "\e931";
+}
+.icon-magasin:before {
+  content: "\e932";
+}
+.icon-marche:before {
+  content: "\e933";
+}
+.icon-dupli_command:before {
+  content: "\e92f";
+}
+.icon-annuler_commande:before {
+  content: "\e92e";
+}
+.icon-coche:before {
+  content: "\e92b";
+}
+.icon-nocoche:before {
+  content: "\e92c";
+}
+.icon-prec:before {
+  content: "\e929";
+}
+.icon-suiv:before {
+  content: "\e92a";
+}
+.icon-commande:before {
+  content: "\e925";
+}
+.icon-danger:before {
+  content: "\e926";
+}
+.icon-valider:before {
+  content: "\e927";
+}
+.icon-warning:before {
+  content: "\e928";
+}
+.icon-bienvenue:before {
+  content: "\e921";
+}
+.icon-desole:before {
+  content: "\e923";
+}
+.icon-erreur:before {
+  content: "\e924";
+}
+.icon-stock:before {
+  content: "\e920";
+}
+.icon-email:before {
+  content: "\e909";
+}
+.icon-repertoire:before {
+  content: "\e916";
+}
+.icon-calendrier:before {
+  content: "\e902";
+}
+.icon-coordonnees:before {
+  content: "\e906";
+}
+.icon-info_admin:before {
+  content: "\e91c";
+}
+.icon-info_bancaire:before {
+  content: "\e91d";
+}
+.icon-admin:before {
+  content: "\e900";
+}
+.icon-automne:before {
+  content: "\e901";
+}
+.icon-collpri:before {
+  content: "\e904";
+}
+.icon-collpub:before {
+  content: "\e905";
+}
+.icon-dupli:before {
+  content: "\e908";
+}
+.icon-entreprise:before {
+  content: "\e90a";
+}
+.icon-ete:before {
+  content: "\e90b";
+}
+.icon-fournisseur:before {
+  content: "\e90c";
+}
+.icon-hiver:before {
+  content: "\e90e";
+}
+.icon-particulier:before {
+  content: "\e911";
+}
+.icon-printemps:before {
+  content: "\e915";
+}
+.icon-societe:before {
+  content: "\e917";
+}
+.icon-xls_creer:before {
+  content: "\e918";
+}
+.icon-xls_envoi:before {
+  content: "\e919";
+}
+.icon-xls_ouvrir:before {
+  content: "\e91a";
+}
+.icon-file-text2:before {
+  content: "\e92d";
+}
+.icon-spinner11:before {
+  content: "\e984";
+}
+.icon-cog:before {
+  content: "\e994";
+}
+.icon-loop:before {
+  content: "\ea2d";
+}
+.icon-lock:before {
+  content: "\e98f";
+}
+.icon-list:before {
+  content: "\e9ba";
+}
+.icon-print:before {
+  content: "\e954";
+}
+.icon-cart:before {
+  content: "\e93a";
+}
+.icon-image:before {
+  content: "\e91b";
+}
+.icon-file-text:before {
+  content: "\e922";
+}
+.icon-plus:before {
+  content: "\f067";
+}
+.icon-folder-o:before {
+  content: "\f114";
+}
+.icon-folder-open-o:before {
+  content: "\f115";
+}
+.icon-chevron-circle-left:before {
+  content: "\f137";
+}
+.icon-chevron-circle-right:before {
+  content: "\f138";
+}
+.icon-file-pdf-o:before {
+  content: "\f1c1";
+}
+.icon-file-excel-o:before {
+  content: "\f1c3";
+}

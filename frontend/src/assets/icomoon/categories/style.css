@@ -1,0 +1,67 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?190laf');
+  src:  url('fonts/icomoon.eot?190laf#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?190laf') format('truetype'),
+    url('fonts/icomoon.woff?190laf') format('woff'),
+    url('fonts/icomoon.svg?190laf#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-departement:before {
+  content: "\e93de";
+}
+.icon-3_9:before {
+  content: "\e93a";
+}
+.icon-1_1:before {
+  content: "\e936";
+}
+.icon-2_4:before {
+  content: "\e938";
+}
+.icon-2_5:before {
+  content: "\e937";
+}
+.icon-1_3:before {
+  content: "\e934";
+}
+.icon-1_2:before {
+  content: "\e935";
+}
+.icon-2_6:before {
+  content: "\e93b";
+}
+.icon-3_7:before {
+  content: "\e913";
+}
+.icon-3_8:before {
+  content: "\e914";
+}
