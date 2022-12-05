@@ -135,14 +135,12 @@ const jobWeek = new CronJob('1 5 0 * * 1', () => {
     }
 }, null, true)
 //Vérification que les planifications ont bien eu lieu
-//En cas de plantage de server le matin du lundi
+//En cas de plantage du serveur le matin du lundi à 9h40m01s
 const jobVerifMonday = new CronJob('1 40 9 * * 1', () => {
-    //console.log('lancement', lastWeek)
     const pathUser = `./app/dump/users/dumpUser${lastWeek}.sql`
     const pathStock = `./app/dump/stocks/dumpStock${lastWeek}.sql`
     try {
         if (fs.existsSync(pathUser)) {
-            //file exists
             // console.log('file exists', lastWeek)
         } else {
             //console.log('file noexists', lastWeek) 
@@ -297,12 +295,10 @@ const jobVerifTuesday = new CronJob('1 0 9 * * 2', () => {
 }, null, true)
 //En cas de pont début de semaine
 const jobVerifWednesday = new CronJob('1 0 9 * * 3', () => {
-    //console.log('lancement', lastWeek)
     const pathUser = `./app/dump/users/dumpUser${lastWeek}.sql`
     const pathStock = `./app/dump/stocks/dumpStock${lastWeek}.sql`
     try {
         if (fs.existsSync(pathUser)) {
-            //file exists
             // console.log('file exists', lastWeek)
         } else {
             //console.log('file noexists', lastWeek) 
@@ -399,7 +395,6 @@ app.get('/', (req, res) => {
     res.json({ message: 'Bienvenue' })
 })
 app.get('*', (req, res) => {
-    //console.log(req)
     return res.status((httpStatus.NOT_FOUND)).json({ error: 'Chemin invalide' })
 })
 

@@ -401,6 +401,7 @@ export default {
     })
     AuthService.profileUser().then((result) => {
       console.log('result', result)
+
       this.form.mobile = result.mobile
       this.form.phone = result.phone
       this.form.fax = result.fax
@@ -409,25 +410,37 @@ export default {
       this.form.cp = result.cp
       this.form.city = result.city
       this.form.state = result.state
-      const billing = result.billing_address
-      const billingSplit = billing.split(' - ')
-      this.form.billing_address = billingSplit[0]
-      this.form.billing_cp = billingSplit[1]
-      this.form.billing_city = billingSplit[2]
-      if (billingSplit[3] != '') {
-        this.form.billing_state = billingSplit[3]
+      if(result.billing_address) {
+        const billing = result.billing_address
+        const billingSplit = billing.split(' - ')
+        this.form.billing_address = billingSplit[0]
+        this.form.billing_cp = billingSplit[1]
+        this.form.billing_city = billingSplit[2]
+        if (billingSplit[3] != '') {
+          this.form.billing_state = billingSplit[3]
+        } else {
+          this.form.billing_state = this.form.billing_state
+        }
       } else {
-        this.form.billing_state = this.form.billing_state
+        this.form.billing_address =''
+        this.form.billing_cp = ''
+        this.form.billing_city = ''
       }
-      const delivery = result.delivery_address
-      const deliverySplit = delivery.split(' - ')
-      this.form.delivery_address = deliverySplit[0]
-      this.form.delivery_cp = deliverySplit[1]
-      this.form.delivery_city = deliverySplit[2]
-      if (deliverySplit[3] != '') {
-        this.form.billing_state = deliverySplit[3]
+      if(result.delivery_address) {
+        const delivery = result.delivery_address
+        const deliverySplit = delivery.split(' - ')
+        this.form.delivery_address = deliverySplit[0]
+        this.form.delivery_cp = deliverySplit[1]
+        this.form.delivery_city = deliverySplit[2]
+        if (deliverySplit[3] != '') {
+          this.form.billing_state = deliverySplit[3]
+        } else {
+          this.form.billing_state = this.form.billing_state
+        }
       } else {
-        this.form.billing_state = this.form.billing_state
+        this.form.delivery_address = ''
+        this.form.delivery_cp = ''
+        this.form.delivery_city = ''
       }
     })
   },

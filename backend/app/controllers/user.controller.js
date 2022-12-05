@@ -11,18 +11,14 @@ const Contact = db.contact
 const RefreshToken = db.refreshToken
 
 exports.profile = (req, res) => {
-    // console.log('req', req)
-    //console.log('req.token', req.token)
     const token = req.token.token
     const accessToken = token.substring(36)
     const decoded = jwt.verify(accessToken, config.secret)
     const userid = decoded.id
-
     Contact.findOne({ where: { id_user: userid }})
         .then(profile => {
             if(profile) {
                 const userObject = {
-                    //mobile: '0613505113',
                     mobile: crypted.decrypted(profile.mobile),
                     phone: crypted.decrypted(profile.phone),
                     fax: crypted.decrypted(profile.fax),
@@ -35,9 +31,12 @@ exports.profile = (req, res) => {
                     delivery_address: crypted.decrypted(profile.delivery_address),
                     token: token
                 }
-                //console.log('userObject', userObject)
                 res.status(httpStatus.OK).send({
                     userObject: userObject
+                })
+            } else {
+                res.status(httpStatus.OK).send({
+                    userObject: {}
                 })
             }
         })
@@ -52,7 +51,6 @@ exports.updateProfile = (req, res) => {
         //L'accesstoken a expiré mais pas le refreshtoken
         //On reçoit un nouveau token
         const token = req.token.token
-        // console.log('token', req.token.token)
         const accessToken = token.substring(36)
         const decoded = jwt.verify(accessToken, config.secret)
         userId = decoded.id
@@ -63,7 +61,6 @@ exports.updateProfile = (req, res) => {
         userId = decoded.id
     }
     if(data.check) {
-        //console.log('check')
         //La partie User a été modifiée
         const user = data.user
         User.update({
@@ -103,7 +100,6 @@ exports.updateProfile = (req, res) => {
                         include: Contact       
                     })
                         .then(user => {
-                            //console.log('user', user.contact.mobile)
                             const newProfile = {
                                 firstname: crypted.decrypt(user.firstname),
                                 lastname: crypted.decrypt(user.lastname),
@@ -120,7 +116,6 @@ exports.updateProfile = (req, res) => {
                                 delivery_address: crypted.decrypted(user.contact.delivery_address),
                                 token: req.token.token
                             }
-                            //console.log('profile', newProfile)
                             res.status(httpStatus.OK).send({
                                 newProfile
                             })
@@ -137,7 +132,6 @@ exports.deleteProfile = (req, res) => {
         //L'accesstoken a expiré mais pas le refreshtoken
         //On reçoit un nouveau token
         const token = req.token.token
-        //console.log('token', req.token.token)
         const accessToken = token.substring(36)
         const decoded = jwt.verify(accessToken, config.secret)
         userId = decoded.id
@@ -174,7 +168,6 @@ exports.deleteUser = (req, res) => {
         //L'accesstoken a expiré mais pas le refreshtoken
         //On reçoit un nouveau token
         token = req.token.token
-        // console.log('token', req.token.token)
         const accessToken = token.substring(36)
         const decoded = jwt.verify(accessToken, config.secret)
         userId = decoded.id

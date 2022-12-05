@@ -22,7 +22,6 @@ const keyCrypted = process.env.CRYPTED
 const keyTwoo = crypto.scryptSync(keyCrypted, 'salt', 24)
 // eslint-disable-next-line no-undef
 exports.encrypted = (text) => {
-    //console.log('text', text)
     if(text  != null) {
         const cipherTwoo = crypto.createCipheriv(algorithm, keyTwoo, iv)
         let encryptedTwoo = cipherTwoo.update(text, 'utf8', 'hex')
@@ -34,7 +33,6 @@ exports.encrypted = (text) => {
     }
 }
 exports.decrypted = (text) => {
-    //console.log('text', text)
     if(text  != null) {
         const decipherTwoo = crypto.createDecipheriv(algorithm, keyTwoo, iv)
         let decryptedTwoo = decipherTwoo.update(text, 'hex', 'utf8')

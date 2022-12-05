@@ -18,7 +18,7 @@ router.get('/user',
     ],
     userController.userBoard
 )
-router.get('/mod',
+/*router.get('/mod',
     [
         verifyAccessToken.checkAccessToken,
         authJwt.verifyTokens,
@@ -33,6 +33,6 @@ router.get('/admin',
         authJwt.isAdmin
     ],
     userController.adminBoard
-)
+)*/
 
 module.exports = router

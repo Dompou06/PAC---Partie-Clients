@@ -1,5 +1,4 @@
 require('dotenv').config()
-//const mysqldump = require('mysqldump')
 const httpStatus = require('http-status')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
@@ -20,7 +19,6 @@ const RefreshToken = db.refreshToken
 const ListPassword = db.listpassword
 
 exports.signup = (req, res) => {
-    // console.log('req.body', req.body)
     const saltRounds = 10
     const newUser = {
         firstname: crypted.encrypt(req.body.firstname),
@@ -69,9 +67,7 @@ exports.signup = (req, res) => {
 
 }
 exports.signin = (req, res) => {
-    // console.log('req', req.body)
     const remenberMe = req.body.rememberme
-    //console.log('reqremember', remenberMe)
     const email = crypted.encrypt(req.body.email)
     User.findOne({
         where: {
@@ -100,11 +96,9 @@ exports.signin = (req, res) => {
                     const authorities = []
                     user.getRoles()
                         .then(roles => {
-                            //console.log('roles', roles[1])
                             for (let i = 0; i < roles.length; i++) {
                                 authorities.push(roles[i].name) 
                             }
-                            //console.log('roles', authorities)
                             res.status(httpStatus.OK).send({
                                 firstname: crypted.decrypt(user.firstname),
                                 lastname: crypted.decrypt(user.lastname),
@@ -125,12 +119,10 @@ exports.signin = (req, res) => {
         })
 }
 exports.userMe = (req, res) => {
-    // console.log ('req', req.token.token)
     const token = req.token.token
     const accessToken = token.substring(36)
     const decoded = jwt.verify(accessToken, config.secret)
     const userid = decoded.id
-    //console.log('userid', userid)
     User.findByPk(userid, {
         include: Role       
     })
@@ -142,7 +134,6 @@ exports.userMe = (req, res) => {
             for (let i = 0; i < response.roles.length; i++) {
                 authorities.push(response.roles[i].name) 
             }           
-            //console.log('user', firstname + lastname + authorities)
             res.status(httpStatus.OK).send({
                 firstname: firstname,
                 lastname: lastname,
@@ -157,7 +148,6 @@ exports.userMe = (req, res) => {
 }
 exports.listPassword = (req, res, next) => {
     const email = crypted.encrypt(req.body.email)
-    //console.log('email', req.body)
     User.findOne({
         where: {
             email: email
@@ -187,9 +177,7 @@ exports.listPassword = (req, res, next) => {
 }
 exports.verifInListPassword = (req, res, next) => {
     const email = crypted.encrypt(req.body.email)
-    // console.log('email', req.body.email)
     const yesterday = new Date(new Date().setDate(new Date().getDate()-1))
-    // console.log('yesterday', yesterday.toISOString().substr(0, 19).replace('T', ' '))
     const remove = yesterday.toISOString().substr(0, 19).replace('T', ' ')
     ListPassword.destroy({
         where: {
@@ -206,7 +194,6 @@ exports.verifInListPassword = (req, res, next) => {
                 attributes: ['id']
             }).then(response => {
                 if(response) {
-                    // console.log('response', response.id)
                     ListPassword.destroy({
                         where: {
                             email: email
@@ -216,7 +203,6 @@ exports.verifInListPassword = (req, res, next) => {
                             next()
                         })
                 } else {
-                    // console.log('noresponse')
                     return res.status(httpStatus.UNAUTHORIZED).send({ message: 'Requête refusée' })
                 }
             })
@@ -226,8 +212,6 @@ exports.verifInListPassword = (req, res, next) => {
         })
 }
 exports.newPassword = (req, res) => {
-    //console.log('email', req.body.email)
-    // console.log('password', req.body.password)
     const saltRounds = 10
     const email = crypted.encrypt(req.body.email)
     const password = bcrypt.hashSync(req.body.password, saltRounds)
@@ -243,7 +227,6 @@ exports.newPassword = (req, res) => {
         })
 }
 exports.sendMail = (req, res) => {
-    //console.log('to', req.body)
     const to = req.body.email
     const subject = req.body.subject
     const text = req.body.text
@@ -266,12 +249,10 @@ exports.sendMail = (req, res) => {
             html: html,
             attachments: attachments
         })
-        // console.log('sendResult', sendResult)
     }
     run()
         // eslint-disable-next-line no-unused-vars
         .then(result => {
-            // console.log('result', result)
             res.status(httpStatus.OK).send({
                 response: 'Un email vous a été envoyé'
             })
@@ -283,7 +264,6 @@ exports.sendMail = (req, res) => {
 }
 exports.deleteToken = (req, res) => {
     const token = req.headers['x-access-token']
-    //console.log('token', token)
     const refreshToken = token.substring(0, 36)
     RefreshToken.destroy({ where: { token: refreshToken } })
     res.status(httpStatus.OK).json({
